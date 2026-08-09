@@ -3,8 +3,8 @@ import { cn } from "@/lib/utils";
 import { resolveMedia } from "@/lib/media";
 
 interface Props {
-  src?: string | null;
-  name?: string | null;
+  src?: string | null | undefined;
+  name?: string | null | undefined;
   size?: "xs" | "sm" | "md" | "lg" | "xl";
   ring?: boolean;
   className?: string;
