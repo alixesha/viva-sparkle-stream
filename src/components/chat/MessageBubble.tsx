@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import { resolveMedia } from "@/lib/media";
-import { clock } from "@/lib/format";
 
 export interface ChatMessage {
   id: string;
@@ -56,5 +55,3 @@ export function MessageBubble({ message, own }: { message: ChatMessage; own: boo
     </div>
   );
 }
-
-export { clock };
