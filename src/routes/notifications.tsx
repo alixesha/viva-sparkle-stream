@@ -119,8 +119,8 @@ function NotificationsPage() {
     }
 
     const data = n.data ?? {};
-    const roomId = data.room_id as string | undefined;
-    const userId = data.user_id as string | undefined;
+    const roomId = data["room_id"] as string | undefined;
+    const userId = data["user_id"] as string | undefined;
 
     if (roomId) {
       void navigate({ to: "/room/$roomId", params: { roomId } });
