@@ -43,8 +43,7 @@ export function ConfirmDialog({
             {confirmLabel}
           </AlertDialogAction>
         </AlertDialogFooter>
-      </AlertDialogFooter>
-    </AlertDialogContent>
+      </AlertDialogContent>
     </AlertDialog>
   );
 }
