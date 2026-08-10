@@ -58,9 +58,9 @@ function RankingsPage() {
       const { data, error } = await supabase.rpc("get_rankings", {
         _kind: kind,
         _period: period,
-        _country: country === "all" ? undefined : country,
+        ...(country !== "all" ? { _country: country } : {}),
         _limit: 50,
-      });
+      } as { _kind: string; _period: string; _country?: string; _limit?: number });
       if (error) throw error;
       return (data ?? []) as RankRow[];
     },

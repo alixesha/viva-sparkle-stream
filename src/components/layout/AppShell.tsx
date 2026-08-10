@@ -1,10 +1,12 @@
 import type { ReactNode } from "react";
 import { Link } from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
 import { Bell, ChevronLeft, Search } from "lucide-react";
 import { Logo } from "@/components/brand/Logo";
 import { UserAvatar } from "@/components/common/UserAvatar";
 import { BottomNav } from "@/components/layout/BottomNav";
 import { useAuth } from "@/hooks/useAuth";
+import { supabase } from "@/integrations/supabase/client";
 import { compact } from "@/lib/format";
 import { cn } from "@/lib/utils";
 
@@ -22,7 +24,21 @@ export function CoinPill() {
 }
 
 export function AppHeader() {
-  const { session } = useAuth();
+  const { session, profile } = useAuth();
+  const uid = session?.user.id;
+  const { data: unread = 0 } = useQuery({
+    queryKey: ["notifications-unread", uid],
+    enabled: Boolean(uid),
+    refetchInterval: 30_000,
+    queryFn: async () => {
+      const { count } = await supabase
+        .from("notifications")
+        .select("id", { count: "exact", head: true })
+        .eq("user_id", uid!)
+        .eq("is_read", false);
+      return count ?? 0;
+    },
+  });
   return (
     <header className="sticky top-0 z-30 -mx-4 mb-3 px-4 pt-3 pb-2 backdrop-blur-xl">
       <div className="flex items-center gap-2">
@@ -42,10 +58,15 @@ export function AppHeader() {
             className="relative grid size-9 place-items-center rounded-full glass tap"
           >
             <Bell className="size-4" />
+            {unread > 0 && (
+              <span className="absolute -right-0.5 -top-0.5 grid min-w-4 place-items-center rounded-full bg-live px-1 text-[10px] font-bold text-primary-foreground">
+                {unread > 9 ? "9+" : unread}
+              </span>
+            )}
           </Link>
           {session ? (
             <Link to="/profile" aria-label="Profile">
-              <UserAvatar size="sm" name="Me" />
+              <UserAvatar size="sm" src={profile?.avatar_url ?? null} name={profile?.display_name ?? "Me"} />
             </Link>
           ) : (
             <Link

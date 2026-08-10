@@ -120,16 +120,22 @@ function DiscoverPage() {
     queryKey: ["discover-new-hosts"],
     enabled: !isSearching,
     queryFn: async () => {
-      const { data, error } = await supabase
+      const { data: hostRows, error } = await supabase
         .from("hosts")
-        .select("user_id, created_at, profiles:user_id(id, username, display_name, avatar_url, level, is_online)")
+        .select("user_id, created_at")
         .eq("status", "active")
         .order("created_at", { ascending: false })
         .limit(12);
       if (error) throw error;
-      return (data ?? [])
-        .map((h) => h.profiles)
-        .filter((p): p is NonNullable<typeof p> => Boolean(p));
+      const ids = (hostRows ?? []).map((h) => h.user_id);
+      if (ids.length === 0) return [];
+      const { data: profs, error: profErr } = await supabase
+        .from("profiles")
+        .select("id, username, display_name, avatar_url, level, is_online")
+        .in("id", ids);
+      if (profErr) throw profErr;
+      const order = new Map(ids.map((id, i) => [id, i]));
+      return (profs ?? []).slice().sort((a, b) => (order.get(a.id) ?? 0) - (order.get(b.id) ?? 0));
     },
   });
 
