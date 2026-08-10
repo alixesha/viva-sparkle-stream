@@ -23,6 +23,7 @@ import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as RankingsRouteImport } from './routes/rankings'
 import { Route as WalletRouteImport } from './routes/wallet'
 import { Route as WithdrawRouteImport } from './routes/withdraw'
+import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as MessagesConversationIdRouteImport } from './routes/messages.$conversationId'
 import { Route as RoomRoomIdRouteImport } from './routes/room.$roomId'
 import { Route as UUsernameRouteImport } from './routes/u.$username'
@@ -98,6 +99,11 @@ const WithdrawRoute = WithdrawRouteImport.update({
   path: '/withdraw',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminRoute,
+} as any)
 const MessagesConversationIdRoute = MessagesConversationIdRouteImport.update({
   id: '/$conversationId',
   path: '/$conversationId',
@@ -121,7 +127,7 @@ const WalletBuyPackageIdRoute = WalletBuyPackageIdRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/admin': typeof AdminRoute
+  '/admin': typeof AdminRouteWithChildren
   '/agency': typeof AgencyRoute
   '/auth': typeof AuthRoute
   '/discover': typeof DiscoverRoute
@@ -137,11 +143,11 @@ export interface FileRoutesByFullPath {
   '/messages/$conversationId': typeof MessagesConversationIdRoute
   '/room/$roomId': typeof RoomRoomIdRoute
   '/u/$username': typeof UUsernameRoute
+  '/admin/': typeof AdminIndexRoute
   '/wallet/buy/$packageId': typeof WalletBuyPackageIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/admin': typeof AdminRoute
   '/agency': typeof AgencyRoute
   '/auth': typeof AuthRoute
   '/discover': typeof DiscoverRoute
@@ -157,12 +163,13 @@ export interface FileRoutesByTo {
   '/messages/$conversationId': typeof MessagesConversationIdRoute
   '/room/$roomId': typeof RoomRoomIdRoute
   '/u/$username': typeof UUsernameRoute
+  '/admin': typeof AdminIndexRoute
   '/wallet/buy/$packageId': typeof WalletBuyPackageIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/admin': typeof AdminRoute
+  '/admin': typeof AdminRouteWithChildren
   '/agency': typeof AgencyRoute
   '/auth': typeof AuthRoute
   '/discover': typeof DiscoverRoute
@@ -178,6 +185,7 @@ export interface FileRoutesById {
   '/messages/$conversationId': typeof MessagesConversationIdRoute
   '/room/$roomId': typeof RoomRoomIdRoute
   '/u/$username': typeof UUsernameRoute
+  '/admin/': typeof AdminIndexRoute
   '/wallet/buy/$packageId': typeof WalletBuyPackageIdRoute
 }
 export interface FileRouteTypes {
@@ -200,11 +208,11 @@ export interface FileRouteTypes {
     | '/messages/$conversationId'
     | '/room/$roomId'
     | '/u/$username'
+    | '/admin/'
     | '/wallet/buy/$packageId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/admin'
     | '/agency'
     | '/auth'
     | '/discover'
@@ -220,6 +228,7 @@ export interface FileRouteTypes {
     | '/messages/$conversationId'
     | '/room/$roomId'
     | '/u/$username'
+    | '/admin'
     | '/wallet/buy/$packageId'
   id:
     | '__root__'
@@ -240,12 +249,13 @@ export interface FileRouteTypes {
     | '/messages/$conversationId'
     | '/room/$roomId'
     | '/u/$username'
+    | '/admin/'
     | '/wallet/buy/$packageId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AdminRoute: typeof AdminRoute
+  AdminRoute: typeof AdminRouteWithChildren
   AgencyRoute: typeof AgencyRoute
   AuthRoute: typeof AuthRoute
   DiscoverRoute: typeof DiscoverRoute
@@ -362,6 +372,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof WithdrawRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/': {
+      id: '/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/messages/$conversationId': {
       id: '/messages/$conversationId'
       path: '/$conversationId'
@@ -393,6 +410,16 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface AdminRouteChildren {
+  AdminIndexRoute: typeof AdminIndexRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminIndexRoute: AdminIndexRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
+
 interface MessagesRouteChildren {
   MessagesConversationIdRoute: typeof MessagesConversationIdRoute
 }
@@ -418,7 +445,7 @@ const WalletRouteWithChildren =
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AdminRoute: AdminRoute,
+  AdminRoute: AdminRouteWithChildren,
   AgencyRoute: AgencyRoute,
   AuthRoute: AuthRoute,
   DiscoverRoute: DiscoverRoute,
