@@ -10,18 +10,38 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AdminRouteImport } from './routes/admin'
+import { Route as AgencyRouteImport } from './routes/agency'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as DiscoverRouteImport } from './routes/discover'
 import { Route as GoLiveRouteImport } from './routes/go-live'
+import { Route as HostRouteImport } from './routes/host'
+import { Route as HostApplyRouteImport } from './routes/host-apply'
 import { Route as MessagesRouteImport } from './routes/messages'
 import { Route as NotificationsRouteImport } from './routes/notifications'
 import { Route as ProfileRouteImport } from './routes/profile'
+import { Route as RankingsRouteImport } from './routes/rankings'
 import { Route as WalletRouteImport } from './routes/wallet'
+import { Route as WithdrawRouteImport } from './routes/withdraw'
+import { Route as AdminIndexRouteImport } from './routes/admin.index'
+import { Route as MessagesConversationIdRouteImport } from './routes/messages.$conversationId'
 import { Route as RoomRoomIdRouteImport } from './routes/room.$roomId'
+import { Route as UUsernameRouteImport } from './routes/u.$username'
+import { Route as WalletBuyPackageIdRouteImport } from './routes/wallet.buy.$packageId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AgencyRoute = AgencyRouteImport.update({
+  id: '/agency',
+  path: '/agency',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthRoute = AuthRouteImport.update({
@@ -39,6 +59,16 @@ const GoLiveRoute = GoLiveRouteImport.update({
   path: '/go-live',
   getParentRoute: () => rootRouteImport,
 } as any)
+const HostRoute = HostRouteImport.update({
+  id: '/host',
+  path: '/host',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HostApplyRoute = HostApplyRouteImport.update({
+  id: '/host-apply',
+  path: '/host-apply',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const MessagesRoute = MessagesRouteImport.update({
   id: '/messages',
   path: '/messages',
@@ -54,97 +84,192 @@ const ProfileRoute = ProfileRouteImport.update({
   path: '/profile',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RankingsRoute = RankingsRouteImport.update({
+  id: '/rankings',
+  path: '/rankings',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const WalletRoute = WalletRouteImport.update({
   id: '/wallet',
   path: '/wallet',
   getParentRoute: () => rootRouteImport,
+} as any)
+const WithdrawRoute = WithdrawRouteImport.update({
+  id: '/withdraw',
+  path: '/withdraw',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminRoute,
+} as any)
+const MessagesConversationIdRoute = MessagesConversationIdRouteImport.update({
+  id: '/$conversationId',
+  path: '/$conversationId',
+  getParentRoute: () => MessagesRoute,
 } as any)
 const RoomRoomIdRoute = RoomRoomIdRouteImport.update({
   id: '/room/$roomId',
   path: '/room/$roomId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const UUsernameRoute = UUsernameRouteImport.update({
+  id: '/u/$username',
+  path: '/u/$username',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const WalletBuyPackageIdRoute = WalletBuyPackageIdRouteImport.update({
+  id: '/buy/$packageId',
+  path: '/buy/$packageId',
+  getParentRoute: () => WalletRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
+  '/agency': typeof AgencyRoute
   '/auth': typeof AuthRoute
   '/discover': typeof DiscoverRoute
   '/go-live': typeof GoLiveRoute
-  '/messages': typeof MessagesRoute
+  '/host': typeof HostRoute
+  '/host-apply': typeof HostApplyRoute
+  '/messages': typeof MessagesRouteWithChildren
   '/notifications': typeof NotificationsRoute
   '/profile': typeof ProfileRoute
-  '/wallet': typeof WalletRoute
+  '/rankings': typeof RankingsRoute
+  '/wallet': typeof WalletRouteWithChildren
+  '/withdraw': typeof WithdrawRoute
+  '/messages/$conversationId': typeof MessagesConversationIdRoute
   '/room/$roomId': typeof RoomRoomIdRoute
+  '/u/$username': typeof UUsernameRoute
+  '/admin/': typeof AdminIndexRoute
+  '/wallet/buy/$packageId': typeof WalletBuyPackageIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/agency': typeof AgencyRoute
   '/auth': typeof AuthRoute
   '/discover': typeof DiscoverRoute
   '/go-live': typeof GoLiveRoute
-  '/messages': typeof MessagesRoute
+  '/host': typeof HostRoute
+  '/host-apply': typeof HostApplyRoute
+  '/messages': typeof MessagesRouteWithChildren
   '/notifications': typeof NotificationsRoute
   '/profile': typeof ProfileRoute
-  '/wallet': typeof WalletRoute
+  '/rankings': typeof RankingsRoute
+  '/wallet': typeof WalletRouteWithChildren
+  '/withdraw': typeof WithdrawRoute
+  '/messages/$conversationId': typeof MessagesConversationIdRoute
   '/room/$roomId': typeof RoomRoomIdRoute
+  '/u/$username': typeof UUsernameRoute
+  '/admin': typeof AdminIndexRoute
+  '/wallet/buy/$packageId': typeof WalletBuyPackageIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
+  '/agency': typeof AgencyRoute
   '/auth': typeof AuthRoute
   '/discover': typeof DiscoverRoute
   '/go-live': typeof GoLiveRoute
-  '/messages': typeof MessagesRoute
+  '/host': typeof HostRoute
+  '/host-apply': typeof HostApplyRoute
+  '/messages': typeof MessagesRouteWithChildren
   '/notifications': typeof NotificationsRoute
   '/profile': typeof ProfileRoute
-  '/wallet': typeof WalletRoute
+  '/rankings': typeof RankingsRoute
+  '/wallet': typeof WalletRouteWithChildren
+  '/withdraw': typeof WithdrawRoute
+  '/messages/$conversationId': typeof MessagesConversationIdRoute
   '/room/$roomId': typeof RoomRoomIdRoute
+  '/u/$username': typeof UUsernameRoute
+  '/admin/': typeof AdminIndexRoute
+  '/wallet/buy/$packageId': typeof WalletBuyPackageIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/admin'
+    | '/agency'
     | '/auth'
     | '/discover'
     | '/go-live'
+    | '/host'
+    | '/host-apply'
     | '/messages'
     | '/notifications'
     | '/profile'
+    | '/rankings'
     | '/wallet'
+    | '/withdraw'
+    | '/messages/$conversationId'
     | '/room/$roomId'
+    | '/u/$username'
+    | '/admin/'
+    | '/wallet/buy/$packageId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/agency'
     | '/auth'
     | '/discover'
     | '/go-live'
+    | '/host'
+    | '/host-apply'
     | '/messages'
     | '/notifications'
     | '/profile'
+    | '/rankings'
     | '/wallet'
+    | '/withdraw'
+    | '/messages/$conversationId'
     | '/room/$roomId'
+    | '/u/$username'
+    | '/admin'
+    | '/wallet/buy/$packageId'
   id:
     | '__root__'
     | '/'
+    | '/admin'
+    | '/agency'
     | '/auth'
     | '/discover'
     | '/go-live'
+    | '/host'
+    | '/host-apply'
     | '/messages'
     | '/notifications'
     | '/profile'
+    | '/rankings'
     | '/wallet'
+    | '/withdraw'
+    | '/messages/$conversationId'
     | '/room/$roomId'
+    | '/u/$username'
+    | '/admin/'
+    | '/wallet/buy/$packageId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdminRoute: typeof AdminRouteWithChildren
+  AgencyRoute: typeof AgencyRoute
   AuthRoute: typeof AuthRoute
   DiscoverRoute: typeof DiscoverRoute
   GoLiveRoute: typeof GoLiveRoute
-  MessagesRoute: typeof MessagesRoute
+  HostRoute: typeof HostRoute
+  HostApplyRoute: typeof HostApplyRoute
+  MessagesRoute: typeof MessagesRouteWithChildren
   NotificationsRoute: typeof NotificationsRoute
   ProfileRoute: typeof ProfileRoute
-  WalletRoute: typeof WalletRoute
+  RankingsRoute: typeof RankingsRoute
+  WalletRoute: typeof WalletRouteWithChildren
+  WithdrawRoute: typeof WithdrawRoute
   RoomRoomIdRoute: typeof RoomRoomIdRoute
+  UUsernameRoute: typeof UUsernameRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -154,6 +279,20 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/agency': {
+      id: '/agency'
+      path: '/agency'
+      fullPath: '/agency'
+      preLoaderRoute: typeof AgencyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/auth': {
@@ -177,6 +316,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof GoLiveRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/host': {
+      id: '/host'
+      path: '/host'
+      fullPath: '/host'
+      preLoaderRoute: typeof HostRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/host-apply': {
+      id: '/host-apply'
+      path: '/host-apply'
+      fullPath: '/host-apply'
+      preLoaderRoute: typeof HostApplyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/messages': {
       id: '/messages'
       path: '/messages'
@@ -198,12 +351,40 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProfileRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/rankings': {
+      id: '/rankings'
+      path: '/rankings'
+      fullPath: '/rankings'
+      preLoaderRoute: typeof RankingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/wallet': {
       id: '/wallet'
       path: '/wallet'
       fullPath: '/wallet'
       preLoaderRoute: typeof WalletRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/withdraw': {
+      id: '/withdraw'
+      path: '/withdraw'
+      fullPath: '/withdraw'
+      preLoaderRoute: typeof WithdrawRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/': {
+      id: '/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/messages/$conversationId': {
+      id: '/messages/$conversationId'
+      path: '/$conversationId'
+      fullPath: '/messages/$conversationId'
+      preLoaderRoute: typeof MessagesConversationIdRouteImport
+      parentRoute: typeof MessagesRoute
     }
     '/room/$roomId': {
       id: '/room/$roomId'
@@ -212,19 +393,73 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RoomRoomIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/u/$username': {
+      id: '/u/$username'
+      path: '/u/$username'
+      fullPath: '/u/$username'
+      preLoaderRoute: typeof UUsernameRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/wallet/buy/$packageId': {
+      id: '/wallet/buy/$packageId'
+      path: '/buy/$packageId'
+      fullPath: '/wallet/buy/$packageId'
+      preLoaderRoute: typeof WalletBuyPackageIdRouteImport
+      parentRoute: typeof WalletRoute
+    }
   }
 }
 
+interface AdminRouteChildren {
+  AdminIndexRoute: typeof AdminIndexRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminIndexRoute: AdminIndexRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
+
+interface MessagesRouteChildren {
+  MessagesConversationIdRoute: typeof MessagesConversationIdRoute
+}
+
+const MessagesRouteChildren: MessagesRouteChildren = {
+  MessagesConversationIdRoute: MessagesConversationIdRoute,
+}
+
+const MessagesRouteWithChildren = MessagesRoute._addFileChildren(
+  MessagesRouteChildren,
+)
+
+interface WalletRouteChildren {
+  WalletBuyPackageIdRoute: typeof WalletBuyPackageIdRoute
+}
+
+const WalletRouteChildren: WalletRouteChildren = {
+  WalletBuyPackageIdRoute: WalletBuyPackageIdRoute,
+}
+
+const WalletRouteWithChildren =
+  WalletRoute._addFileChildren(WalletRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdminRoute: AdminRouteWithChildren,
+  AgencyRoute: AgencyRoute,
   AuthRoute: AuthRoute,
   DiscoverRoute: DiscoverRoute,
   GoLiveRoute: GoLiveRoute,
-  MessagesRoute: MessagesRoute,
+  HostRoute: HostRoute,
+  HostApplyRoute: HostApplyRoute,
+  MessagesRoute: MessagesRouteWithChildren,
   NotificationsRoute: NotificationsRoute,
   ProfileRoute: ProfileRoute,
-  WalletRoute: WalletRoute,
+  RankingsRoute: RankingsRoute,
+  WalletRoute: WalletRouteWithChildren,
+  WithdrawRoute: WithdrawRoute,
   RoomRoomIdRoute: RoomRoomIdRoute,
+  UUsernameRoute: UUsernameRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
