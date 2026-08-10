@@ -1,0 +1,28 @@
+-- Add foreign keys to public.profiles so PostgREST can embed profile data.
+ALTER TABLE public.live_rooms ADD CONSTRAINT live_rooms_host_profile_fkey FOREIGN KEY (host_id) REFERENCES public.profiles(id) ON DELETE CASCADE;
+ALTER TABLE public.hosts ADD CONSTRAINT hosts_user_profile_fkey FOREIGN KEY (user_id) REFERENCES public.profiles(id) ON DELETE CASCADE;
+ALTER TABLE public.host_applications ADD CONSTRAINT host_applications_user_profile_fkey FOREIGN KEY (user_id) REFERENCES public.profiles(id) ON DELETE CASCADE;
+ALTER TABLE public.host_earnings ADD CONSTRAINT host_earnings_host_profile_fkey FOREIGN KEY (host_id) REFERENCES public.profiles(id) ON DELETE CASCADE;
+ALTER TABLE public.withdrawals ADD CONSTRAINT withdrawals_host_profile_fkey FOREIGN KEY (host_id) REFERENCES public.profiles(id) ON DELETE CASCADE;
+ALTER TABLE public.gift_transactions ADD CONSTRAINT gift_transactions_sender_profile_fkey FOREIGN KEY (sender_id) REFERENCES public.profiles(id) ON DELETE CASCADE;
+ALTER TABLE public.gift_transactions ADD CONSTRAINT gift_transactions_receiver_profile_fkey FOREIGN KEY (receiver_id) REFERENCES public.profiles(id) ON DELETE CASCADE;
+ALTER TABLE public.coin_transactions ADD CONSTRAINT coin_transactions_user_profile_fkey FOREIGN KEY (user_id) REFERENCES public.profiles(id) ON DELETE CASCADE;
+ALTER TABLE public.coin_purchase_requests ADD CONSTRAINT coin_purchase_requests_user_profile_fkey FOREIGN KEY (user_id) REFERENCES public.profiles(id) ON DELETE CASCADE;
+ALTER TABLE public.follows ADD CONSTRAINT follows_follower_profile_fkey FOREIGN KEY (follower_id) REFERENCES public.profiles(id) ON DELETE CASCADE;
+ALTER TABLE public.follows ADD CONSTRAINT follows_following_profile_fkey FOREIGN KEY (following_id) REFERENCES public.profiles(id) ON DELETE CASCADE;
+ALTER TABLE public.blocks ADD CONSTRAINT blocks_blocker_profile_fkey FOREIGN KEY (blocker_id) REFERENCES public.profiles(id) ON DELETE CASCADE;
+ALTER TABLE public.blocks ADD CONSTRAINT blocks_blocked_profile_fkey FOREIGN KEY (blocked_id) REFERENCES public.profiles(id) ON DELETE CASCADE;
+ALTER TABLE public.reports ADD CONSTRAINT reports_reporter_profile_fkey FOREIGN KEY (reporter_id) REFERENCES public.profiles(id) ON DELETE CASCADE;
+ALTER TABLE public.reports ADD CONSTRAINT reports_target_user_profile_fkey FOREIGN KEY (target_user_id) REFERENCES public.profiles(id) ON DELETE SET NULL;
+ALTER TABLE public.conversations ADD CONSTRAINT conversations_user_a_profile_fkey FOREIGN KEY (user_a) REFERENCES public.profiles(id) ON DELETE CASCADE;
+ALTER TABLE public.conversations ADD CONSTRAINT conversations_user_b_profile_fkey FOREIGN KEY (user_b) REFERENCES public.profiles(id) ON DELETE CASCADE;
+ALTER TABLE public.messages ADD CONSTRAINT messages_sender_profile_fkey FOREIGN KEY (sender_id) REFERENCES public.profiles(id) ON DELETE CASCADE;
+ALTER TABLE public.live_participants ADD CONSTRAINT live_participants_user_profile_fkey FOREIGN KEY (user_id) REFERENCES public.profiles(id) ON DELETE CASCADE;
+ALTER TABLE public.live_messages ADD CONSTRAINT live_messages_user_profile_fkey FOREIGN KEY (user_id) REFERENCES public.profiles(id) ON DELETE SET NULL;
+ALTER TABLE public.agencies ADD CONSTRAINT agencies_owner_profile_fkey FOREIGN KEY (owner_id) REFERENCES public.profiles(id) ON DELETE CASCADE;
+ALTER TABLE public.agency_members ADD CONSTRAINT agency_members_host_profile_fkey FOREIGN KEY (host_id) REFERENCES public.profiles(id) ON DELETE CASCADE;
+ALTER TABLE public.bans ADD CONSTRAINT bans_user_profile_fkey FOREIGN KEY (user_id) REFERENCES public.profiles(id) ON DELETE CASCADE;
+ALTER TABLE public.admin_actions ADD CONSTRAINT admin_actions_admin_profile_fkey FOREIGN KEY (admin_id) REFERENCES public.profiles(id) ON DELETE CASCADE;
+ALTER TABLE public.pk_battles ADD CONSTRAINT pk_battles_host_a_profile_fkey FOREIGN KEY (host_a) REFERENCES public.profiles(id) ON DELETE CASCADE;
+ALTER TABLE public.pk_battles ADD CONSTRAINT pk_battles_host_b_profile_fkey FOREIGN KEY (host_b) REFERENCES public.profiles(id) ON DELETE CASCADE;
+ALTER TABLE public.user_roles ADD CONSTRAINT user_roles_user_profile_fkey FOREIGN KEY (user_id) REFERENCES public.profiles(id) ON DELETE CASCADE;

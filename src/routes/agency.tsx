@@ -10,7 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
-import { compact, timeAgo } from "@/lib/format";
+import { compact } from "@/lib/format";
 
 export const Route = createFileRoute("/agency")({
   head: () => ({

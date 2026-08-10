@@ -112,7 +112,7 @@ function BuyPackagePage() {
 
   if (loading || pkgQuery.isLoading) {
     return (
-      <AppShell header={<PageHeader title="Buy coins" backTo="/wallet" />}>
+      <AppShell header={<PageHeader title="Buy coins" />}>
         <RowSkeletonList count={4} />
       </AppShell>
     );
@@ -120,7 +120,7 @@ function BuyPackagePage() {
 
   if (!user) {
     return (
-      <AppShell header={<PageHeader title="Buy coins" backTo="/wallet" />}>
+      <AppShell header={<PageHeader title="Buy coins" />}>
         <EmptyState
           icon="🔒"
           title="Sign in required"
@@ -137,7 +137,7 @@ function BuyPackagePage() {
 
   if (pkgQuery.isError) {
     return (
-      <AppShell header={<PageHeader title="Buy coins" backTo="/wallet" />}>
+      <AppShell header={<PageHeader title="Buy coins" />}>
         <ErrorState retry={() => void pkgQuery.refetch()} />
       </AppShell>
     );
@@ -146,7 +146,7 @@ function BuyPackagePage() {
   const pkg = pkgQuery.data;
   if (!pkg) {
     return (
-      <AppShell header={<PageHeader title="Buy coins" backTo="/wallet" />}>
+      <AppShell header={<PageHeader title="Buy coins" />}>
         <EmptyState
           icon="🚫"
           title="Package not found"
@@ -164,7 +164,7 @@ function BuyPackagePage() {
   const pending = pendingQuery.data;
 
   return (
-    <AppShell header={<PageHeader title={pkg.name} backTo="/wallet" />}>
+    <AppShell header={<PageHeader title={pkg.name} />}>
       <TestModeBanner label="TEST MODE — NO REAL MONEY IS PROCESSED" />
 
       <div className="mt-4 rounded-3xl glass p-4">

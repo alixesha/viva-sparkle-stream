@@ -110,23 +110,29 @@ function HostDashboard({ userId }: { userId: string }) {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("gift_transactions")
-        .select("sender_id, diamonds_earned, sender:profiles!gift_transactions_sender_id_fkey(username, display_name, avatar_url)")
+        .select("sender_id, diamonds_earned")
         .eq("receiver_id", userId)
         .limit(500);
       if (error) throw error;
-      const totals = new Map<string, { name: string; avatar: string | null; diamonds: number }>();
+      const totals = new Map<string, number>();
       for (const row of data ?? []) {
-        const sender = row.sender as { username: string; display_name: string; avatar_url: string | null } | null;
-        const key = row.sender_id;
-        const prev = totals.get(key);
-        const diamonds = (prev?.diamonds ?? 0) + row.diamonds_earned;
-        totals.set(key, {
-          name: sender?.display_name || sender?.username || "Someone",
-          avatar: sender?.avatar_url ?? null,
-          diamonds,
-        });
+        totals.set(row.sender_id, (totals.get(row.sender_id) ?? 0) + row.diamonds_earned);
       }
-      return Array.from(totals.values()).sort((a, b) => b.diamonds - a.diamonds).slice(0, 10);
+      const topIds = Array.from(totals.entries()).sort((a, b) => b[1] - a[1]).slice(0, 10);
+      if (!topIds.length) return [];
+      const { data: profilesData } = await supabase
+        .from("profiles")
+        .select("id, username, display_name, avatar_url")
+        .in("id", topIds.map(([id]) => id));
+      const profileMap = new Map((profilesData ?? []).map((p) => [p.id, p]));
+      return topIds.map(([id, diamonds]) => {
+        const p = profileMap.get(id);
+        return {
+          name: p?.display_name || p?.username || "Someone",
+          avatar: p?.avatar_url ?? null,
+          diamonds,
+        };
+      });
     },
   });
 

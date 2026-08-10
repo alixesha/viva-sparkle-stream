@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AgencyRouteImport } from './routes/agency'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as DiscoverRouteImport } from './routes/discover'
 import { Route as GoLiveRouteImport } from './routes/go-live'
@@ -23,10 +24,16 @@ import { Route as WalletRouteImport } from './routes/wallet'
 import { Route as WithdrawRouteImport } from './routes/withdraw'
 import { Route as RoomRoomIdRouteImport } from './routes/room.$roomId'
 import { Route as UUsernameRouteImport } from './routes/u.$username'
+import { Route as WalletBuyPackageIdRouteImport } from './routes/wallet.buy.$packageId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AgencyRoute = AgencyRouteImport.update({
+  id: '/agency',
+  path: '/agency',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthRoute = AuthRouteImport.update({
@@ -94,9 +101,15 @@ const UUsernameRoute = UUsernameRouteImport.update({
   path: '/u/$username',
   getParentRoute: () => rootRouteImport,
 } as any)
+const WalletBuyPackageIdRoute = WalletBuyPackageIdRouteImport.update({
+  id: '/buy/$packageId',
+  path: '/buy/$packageId',
+  getParentRoute: () => WalletRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/agency': typeof AgencyRoute
   '/auth': typeof AuthRoute
   '/discover': typeof DiscoverRoute
   '/go-live': typeof GoLiveRoute
@@ -106,13 +119,15 @@ export interface FileRoutesByFullPath {
   '/notifications': typeof NotificationsRoute
   '/profile': typeof ProfileRoute
   '/rankings': typeof RankingsRoute
-  '/wallet': typeof WalletRoute
+  '/wallet': typeof WalletRouteWithChildren
   '/withdraw': typeof WithdrawRoute
   '/room/$roomId': typeof RoomRoomIdRoute
   '/u/$username': typeof UUsernameRoute
+  '/wallet/buy/$packageId': typeof WalletBuyPackageIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/agency': typeof AgencyRoute
   '/auth': typeof AuthRoute
   '/discover': typeof DiscoverRoute
   '/go-live': typeof GoLiveRoute
@@ -122,14 +137,16 @@ export interface FileRoutesByTo {
   '/notifications': typeof NotificationsRoute
   '/profile': typeof ProfileRoute
   '/rankings': typeof RankingsRoute
-  '/wallet': typeof WalletRoute
+  '/wallet': typeof WalletRouteWithChildren
   '/withdraw': typeof WithdrawRoute
   '/room/$roomId': typeof RoomRoomIdRoute
   '/u/$username': typeof UUsernameRoute
+  '/wallet/buy/$packageId': typeof WalletBuyPackageIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/agency': typeof AgencyRoute
   '/auth': typeof AuthRoute
   '/discover': typeof DiscoverRoute
   '/go-live': typeof GoLiveRoute
@@ -139,15 +156,17 @@ export interface FileRoutesById {
   '/notifications': typeof NotificationsRoute
   '/profile': typeof ProfileRoute
   '/rankings': typeof RankingsRoute
-  '/wallet': typeof WalletRoute
+  '/wallet': typeof WalletRouteWithChildren
   '/withdraw': typeof WithdrawRoute
   '/room/$roomId': typeof RoomRoomIdRoute
   '/u/$username': typeof UUsernameRoute
+  '/wallet/buy/$packageId': typeof WalletBuyPackageIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/agency'
     | '/auth'
     | '/discover'
     | '/go-live'
@@ -161,9 +180,11 @@ export interface FileRouteTypes {
     | '/withdraw'
     | '/room/$roomId'
     | '/u/$username'
+    | '/wallet/buy/$packageId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/agency'
     | '/auth'
     | '/discover'
     | '/go-live'
@@ -177,9 +198,11 @@ export interface FileRouteTypes {
     | '/withdraw'
     | '/room/$roomId'
     | '/u/$username'
+    | '/wallet/buy/$packageId'
   id:
     | '__root__'
     | '/'
+    | '/agency'
     | '/auth'
     | '/discover'
     | '/go-live'
@@ -193,10 +216,12 @@ export interface FileRouteTypes {
     | '/withdraw'
     | '/room/$roomId'
     | '/u/$username'
+    | '/wallet/buy/$packageId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AgencyRoute: typeof AgencyRoute
   AuthRoute: typeof AuthRoute
   DiscoverRoute: typeof DiscoverRoute
   GoLiveRoute: typeof GoLiveRoute
@@ -206,7 +231,7 @@ export interface RootRouteChildren {
   NotificationsRoute: typeof NotificationsRoute
   ProfileRoute: typeof ProfileRoute
   RankingsRoute: typeof RankingsRoute
-  WalletRoute: typeof WalletRoute
+  WalletRoute: typeof WalletRouteWithChildren
   WithdrawRoute: typeof WithdrawRoute
   RoomRoomIdRoute: typeof RoomRoomIdRoute
   UUsernameRoute: typeof UUsernameRoute
@@ -219,6 +244,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/agency': {
+      id: '/agency'
+      path: '/agency'
+      fullPath: '/agency'
+      preLoaderRoute: typeof AgencyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/auth': {
@@ -312,11 +344,30 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof UUsernameRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/wallet/buy/$packageId': {
+      id: '/wallet/buy/$packageId'
+      path: '/buy/$packageId'
+      fullPath: '/wallet/buy/$packageId'
+      preLoaderRoute: typeof WalletBuyPackageIdRouteImport
+      parentRoute: typeof WalletRoute
+    }
   }
 }
 
+interface WalletRouteChildren {
+  WalletBuyPackageIdRoute: typeof WalletBuyPackageIdRoute
+}
+
+const WalletRouteChildren: WalletRouteChildren = {
+  WalletBuyPackageIdRoute: WalletBuyPackageIdRoute,
+}
+
+const WalletRouteWithChildren =
+  WalletRoute._addFileChildren(WalletRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AgencyRoute: AgencyRoute,
   AuthRoute: AuthRoute,
   DiscoverRoute: DiscoverRoute,
   GoLiveRoute: GoLiveRoute,
@@ -326,7 +377,7 @@ const rootRouteChildren: RootRouteChildren = {
   NotificationsRoute: NotificationsRoute,
   ProfileRoute: ProfileRoute,
   RankingsRoute: RankingsRoute,
-  WalletRoute: WalletRoute,
+  WalletRoute: WalletRouteWithChildren,
   WithdrawRoute: WithdrawRoute,
   RoomRoomIdRoute: RoomRoomIdRoute,
   UUsernameRoute: UUsernameRoute,
