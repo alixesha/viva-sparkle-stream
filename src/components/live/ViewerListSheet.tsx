@@ -29,13 +29,23 @@ export function ViewerListSheet({
 
   const load = async () => {
     setLoading(true);
-    const { data } = await supabase
+    const { data: participants } = await supabase
       .from("live_participants")
-      .select("*, profile:profiles!live_participants_user_id_fkey(username, display_name, avatar_url)")
+      .select("*")
       .eq("room_id", roomId)
       .is("left_at", null)
       .order("joined_at", { ascending: false });
-    setRows((data as unknown as ViewerRow[]) ?? []);
+    const list = participants ?? [];
+    const ids = list.map((p) => p.user_id);
+    let profileMap = new Map<string, { username: string; display_name: string; avatar_url: string | null }>();
+    if (ids.length > 0) {
+      const { data: profiles } = await supabase
+        .from("profiles")
+        .select("id, username, display_name, avatar_url")
+        .in("id", ids);
+      profileMap = new Map((profiles ?? []).map((p) => [p.id, p]));
+    }
+    setRows(list.map((p) => ({ ...p, profile: profileMap.get(p.user_id) ?? null })));
     setLoading(false);
   };
 
