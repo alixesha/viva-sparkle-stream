@@ -13,9 +13,11 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as DiscoverRouteImport } from './routes/discover'
 import { Route as GoLiveRouteImport } from './routes/go-live'
+import { Route as HostApplyRouteImport } from './routes/host-apply'
 import { Route as MessagesRouteImport } from './routes/messages'
 import { Route as NotificationsRouteImport } from './routes/notifications'
 import { Route as ProfileRouteImport } from './routes/profile'
+import { Route as RankingsRouteImport } from './routes/rankings'
 import { Route as WalletRouteImport } from './routes/wallet'
 import { Route as RoomRoomIdRouteImport } from './routes/room.$roomId'
 
@@ -39,6 +41,11 @@ const GoLiveRoute = GoLiveRouteImport.update({
   path: '/go-live',
   getParentRoute: () => rootRouteImport,
 } as any)
+const HostApplyRoute = HostApplyRouteImport.update({
+  id: '/host-apply',
+  path: '/host-apply',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const MessagesRoute = MessagesRouteImport.update({
   id: '/messages',
   path: '/messages',
@@ -52,6 +59,11 @@ const NotificationsRoute = NotificationsRouteImport.update({
 const ProfileRoute = ProfileRouteImport.update({
   id: '/profile',
   path: '/profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RankingsRoute = RankingsRouteImport.update({
+  id: '/rankings',
+  path: '/rankings',
   getParentRoute: () => rootRouteImport,
 } as any)
 const WalletRoute = WalletRouteImport.update({
@@ -70,9 +82,11 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/discover': typeof DiscoverRoute
   '/go-live': typeof GoLiveRoute
+  '/host-apply': typeof HostApplyRoute
   '/messages': typeof MessagesRoute
   '/notifications': typeof NotificationsRoute
   '/profile': typeof ProfileRoute
+  '/rankings': typeof RankingsRoute
   '/wallet': typeof WalletRoute
   '/room/$roomId': typeof RoomRoomIdRoute
 }
@@ -81,9 +95,11 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/discover': typeof DiscoverRoute
   '/go-live': typeof GoLiveRoute
+  '/host-apply': typeof HostApplyRoute
   '/messages': typeof MessagesRoute
   '/notifications': typeof NotificationsRoute
   '/profile': typeof ProfileRoute
+  '/rankings': typeof RankingsRoute
   '/wallet': typeof WalletRoute
   '/room/$roomId': typeof RoomRoomIdRoute
 }
@@ -93,9 +109,11 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/discover': typeof DiscoverRoute
   '/go-live': typeof GoLiveRoute
+  '/host-apply': typeof HostApplyRoute
   '/messages': typeof MessagesRoute
   '/notifications': typeof NotificationsRoute
   '/profile': typeof ProfileRoute
+  '/rankings': typeof RankingsRoute
   '/wallet': typeof WalletRoute
   '/room/$roomId': typeof RoomRoomIdRoute
 }
@@ -106,9 +124,11 @@ export interface FileRouteTypes {
     | '/auth'
     | '/discover'
     | '/go-live'
+    | '/host-apply'
     | '/messages'
     | '/notifications'
     | '/profile'
+    | '/rankings'
     | '/wallet'
     | '/room/$roomId'
   fileRoutesByTo: FileRoutesByTo
@@ -117,9 +137,11 @@ export interface FileRouteTypes {
     | '/auth'
     | '/discover'
     | '/go-live'
+    | '/host-apply'
     | '/messages'
     | '/notifications'
     | '/profile'
+    | '/rankings'
     | '/wallet'
     | '/room/$roomId'
   id:
@@ -128,9 +150,11 @@ export interface FileRouteTypes {
     | '/auth'
     | '/discover'
     | '/go-live'
+    | '/host-apply'
     | '/messages'
     | '/notifications'
     | '/profile'
+    | '/rankings'
     | '/wallet'
     | '/room/$roomId'
   fileRoutesById: FileRoutesById
@@ -140,9 +164,11 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   DiscoverRoute: typeof DiscoverRoute
   GoLiveRoute: typeof GoLiveRoute
+  HostApplyRoute: typeof HostApplyRoute
   MessagesRoute: typeof MessagesRoute
   NotificationsRoute: typeof NotificationsRoute
   ProfileRoute: typeof ProfileRoute
+  RankingsRoute: typeof RankingsRoute
   WalletRoute: typeof WalletRoute
   RoomRoomIdRoute: typeof RoomRoomIdRoute
 }
@@ -177,6 +203,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof GoLiveRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/host-apply': {
+      id: '/host-apply'
+      path: '/host-apply'
+      fullPath: '/host-apply'
+      preLoaderRoute: typeof HostApplyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/messages': {
       id: '/messages'
       path: '/messages'
@@ -196,6 +229,13 @@ declare module '@tanstack/react-router' {
       path: '/profile'
       fullPath: '/profile'
       preLoaderRoute: typeof ProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/rankings': {
+      id: '/rankings'
+      path: '/rankings'
+      fullPath: '/rankings'
+      preLoaderRoute: typeof RankingsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/wallet': {
@@ -220,9 +260,11 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   DiscoverRoute: DiscoverRoute,
   GoLiveRoute: GoLiveRoute,
+  HostApplyRoute: HostApplyRoute,
   MessagesRoute: MessagesRoute,
   NotificationsRoute: NotificationsRoute,
   ProfileRoute: ProfileRoute,
+  RankingsRoute: RankingsRoute,
   WalletRoute: WalletRoute,
   RoomRoomIdRoute: RoomRoomIdRoute,
 }
