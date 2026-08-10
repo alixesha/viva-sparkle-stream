@@ -11,12 +11,12 @@ import { useRealtime } from "@/hooks/useRealtime";
 import { Button } from "@/components/ui/button";
 
 interface MessagesSearch {
-  to?: string;
+  to?: string | undefined;
 }
 
 export const Route = createFileRoute("/messages")({
   validateSearch: (search: Record<string, unknown>): MessagesSearch => ({
-    to: typeof search.to === "string" ? search.to : undefined,
+    to: typeof search["to"] === "string" ? (search["to"] as string) : undefined,
   }),
   head: () => ({
     meta: [
