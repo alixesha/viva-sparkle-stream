@@ -22,6 +22,7 @@ import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as RankingsRouteImport } from './routes/rankings'
 import { Route as WalletRouteImport } from './routes/wallet'
 import { Route as WithdrawRouteImport } from './routes/withdraw'
+import { Route as MessagesConversationIdRouteImport } from './routes/messages.$conversationId'
 import { Route as RoomRoomIdRouteImport } from './routes/room.$roomId'
 import { Route as UUsernameRouteImport } from './routes/u.$username'
 import { Route as WalletBuyPackageIdRouteImport } from './routes/wallet.buy.$packageId'
@@ -91,6 +92,11 @@ const WithdrawRoute = WithdrawRouteImport.update({
   path: '/withdraw',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MessagesConversationIdRoute = MessagesConversationIdRouteImport.update({
+  id: '/$conversationId',
+  path: '/$conversationId',
+  getParentRoute: () => MessagesRoute,
+} as any)
 const RoomRoomIdRoute = RoomRoomIdRouteImport.update({
   id: '/room/$roomId',
   path: '/room/$roomId',
@@ -115,12 +121,13 @@ export interface FileRoutesByFullPath {
   '/go-live': typeof GoLiveRoute
   '/host': typeof HostRoute
   '/host-apply': typeof HostApplyRoute
-  '/messages': typeof MessagesRoute
+  '/messages': typeof MessagesRouteWithChildren
   '/notifications': typeof NotificationsRoute
   '/profile': typeof ProfileRoute
   '/rankings': typeof RankingsRoute
   '/wallet': typeof WalletRouteWithChildren
   '/withdraw': typeof WithdrawRoute
+  '/messages/$conversationId': typeof MessagesConversationIdRoute
   '/room/$roomId': typeof RoomRoomIdRoute
   '/u/$username': typeof UUsernameRoute
   '/wallet/buy/$packageId': typeof WalletBuyPackageIdRoute
@@ -133,12 +140,13 @@ export interface FileRoutesByTo {
   '/go-live': typeof GoLiveRoute
   '/host': typeof HostRoute
   '/host-apply': typeof HostApplyRoute
-  '/messages': typeof MessagesRoute
+  '/messages': typeof MessagesRouteWithChildren
   '/notifications': typeof NotificationsRoute
   '/profile': typeof ProfileRoute
   '/rankings': typeof RankingsRoute
   '/wallet': typeof WalletRouteWithChildren
   '/withdraw': typeof WithdrawRoute
+  '/messages/$conversationId': typeof MessagesConversationIdRoute
   '/room/$roomId': typeof RoomRoomIdRoute
   '/u/$username': typeof UUsernameRoute
   '/wallet/buy/$packageId': typeof WalletBuyPackageIdRoute
@@ -152,12 +160,13 @@ export interface FileRoutesById {
   '/go-live': typeof GoLiveRoute
   '/host': typeof HostRoute
   '/host-apply': typeof HostApplyRoute
-  '/messages': typeof MessagesRoute
+  '/messages': typeof MessagesRouteWithChildren
   '/notifications': typeof NotificationsRoute
   '/profile': typeof ProfileRoute
   '/rankings': typeof RankingsRoute
   '/wallet': typeof WalletRouteWithChildren
   '/withdraw': typeof WithdrawRoute
+  '/messages/$conversationId': typeof MessagesConversationIdRoute
   '/room/$roomId': typeof RoomRoomIdRoute
   '/u/$username': typeof UUsernameRoute
   '/wallet/buy/$packageId': typeof WalletBuyPackageIdRoute
@@ -178,6 +187,7 @@ export interface FileRouteTypes {
     | '/rankings'
     | '/wallet'
     | '/withdraw'
+    | '/messages/$conversationId'
     | '/room/$roomId'
     | '/u/$username'
     | '/wallet/buy/$packageId'
@@ -196,6 +206,7 @@ export interface FileRouteTypes {
     | '/rankings'
     | '/wallet'
     | '/withdraw'
+    | '/messages/$conversationId'
     | '/room/$roomId'
     | '/u/$username'
     | '/wallet/buy/$packageId'
@@ -214,6 +225,7 @@ export interface FileRouteTypes {
     | '/rankings'
     | '/wallet'
     | '/withdraw'
+    | '/messages/$conversationId'
     | '/room/$roomId'
     | '/u/$username'
     | '/wallet/buy/$packageId'
@@ -227,7 +239,7 @@ export interface RootRouteChildren {
   GoLiveRoute: typeof GoLiveRoute
   HostRoute: typeof HostRoute
   HostApplyRoute: typeof HostApplyRoute
-  MessagesRoute: typeof MessagesRoute
+  MessagesRoute: typeof MessagesRouteWithChildren
   NotificationsRoute: typeof NotificationsRoute
   ProfileRoute: typeof ProfileRoute
   RankingsRoute: typeof RankingsRoute
@@ -330,6 +342,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof WithdrawRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/messages/$conversationId': {
+      id: '/messages/$conversationId'
+      path: '/$conversationId'
+      fullPath: '/messages/$conversationId'
+      preLoaderRoute: typeof MessagesConversationIdRouteImport
+      parentRoute: typeof MessagesRoute
+    }
     '/room/$roomId': {
       id: '/room/$roomId'
       path: '/room/$roomId'
@@ -354,6 +373,18 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface MessagesRouteChildren {
+  MessagesConversationIdRoute: typeof MessagesConversationIdRoute
+}
+
+const MessagesRouteChildren: MessagesRouteChildren = {
+  MessagesConversationIdRoute: MessagesConversationIdRoute,
+}
+
+const MessagesRouteWithChildren = MessagesRoute._addFileChildren(
+  MessagesRouteChildren,
+)
+
 interface WalletRouteChildren {
   WalletBuyPackageIdRoute: typeof WalletBuyPackageIdRoute
 }
@@ -373,7 +404,7 @@ const rootRouteChildren: RootRouteChildren = {
   GoLiveRoute: GoLiveRoute,
   HostRoute: HostRoute,
   HostApplyRoute: HostApplyRoute,
-  MessagesRoute: MessagesRoute,
+  MessagesRoute: MessagesRouteWithChildren,
   NotificationsRoute: NotificationsRoute,
   ProfileRoute: ProfileRoute,
   RankingsRoute: RankingsRoute,
