@@ -59,7 +59,7 @@ function AdminPackages() {
       is_active: form.is_active,
       sort_order: Number(form.sort_order || 0),
     };
-    if (!payload.name || !(payload.coins > 0)) return toast.error("Name and coins are required");
+    if (!payload.name || !(payload.coins > 0)) { toast.error("Name and coins are required"); return; }
     const { error } = form.id
       ? await supabase.from("coin_packages").update(payload).eq("id", form.id)
       : await supabase.from("coin_packages").insert(payload);
