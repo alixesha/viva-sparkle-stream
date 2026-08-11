@@ -26,7 +26,10 @@ import { Route as WalletRouteImport } from './routes/wallet'
 import { Route as WithdrawRouteImport } from './routes/withdraw'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as AdminApplicationsRouteImport } from './routes/admin.applications'
+import { Route as AdminCoinsRouteImport } from './routes/admin.coins'
+import { Route as AdminGiftsRouteImport } from './routes/admin.gifts'
 import { Route as AdminHostsRouteImport } from './routes/admin.hosts'
+import { Route as AdminPackagesRouteImport } from './routes/admin.packages'
 import { Route as AdminRoomsRouteImport } from './routes/admin.rooms'
 import { Route as AdminUsersRouteImport } from './routes/admin.users'
 import { Route as MessagesConversationIdRouteImport } from './routes/messages.$conversationId'
@@ -119,9 +122,24 @@ const AdminApplicationsRoute = AdminApplicationsRouteImport.update({
   path: '/applications',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminCoinsRoute = AdminCoinsRouteImport.update({
+  id: '/coins',
+  path: '/coins',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminGiftsRoute = AdminGiftsRouteImport.update({
+  id: '/gifts',
+  path: '/gifts',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminHostsRoute = AdminHostsRouteImport.update({
   id: '/hosts',
   path: '/hosts',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminPackagesRoute = AdminPackagesRouteImport.update({
+  id: '/packages',
+  path: '/packages',
   getParentRoute: () => AdminRoute,
 } as any)
 const AdminRoomsRoute = AdminRoomsRouteImport.update({
@@ -172,7 +190,10 @@ export interface FileRoutesByFullPath {
   '/wallet': typeof WalletRouteWithChildren
   '/withdraw': typeof WithdrawRoute
   '/admin/applications': typeof AdminApplicationsRoute
+  '/admin/coins': typeof AdminCoinsRoute
+  '/admin/gifts': typeof AdminGiftsRoute
   '/admin/hosts': typeof AdminHostsRoute
+  '/admin/packages': typeof AdminPackagesRoute
   '/admin/rooms': typeof AdminRoomsRoute
   '/admin/users': typeof AdminUsersRoute
   '/messages/$conversationId': typeof MessagesConversationIdRoute
@@ -197,7 +218,10 @@ export interface FileRoutesByTo {
   '/wallet': typeof WalletRouteWithChildren
   '/withdraw': typeof WithdrawRoute
   '/admin/applications': typeof AdminApplicationsRoute
+  '/admin/coins': typeof AdminCoinsRoute
+  '/admin/gifts': typeof AdminGiftsRoute
   '/admin/hosts': typeof AdminHostsRoute
+  '/admin/packages': typeof AdminPackagesRoute
   '/admin/rooms': typeof AdminRoomsRoute
   '/admin/users': typeof AdminUsersRoute
   '/messages/$conversationId': typeof MessagesConversationIdRoute
@@ -224,7 +248,10 @@ export interface FileRoutesById {
   '/wallet': typeof WalletRouteWithChildren
   '/withdraw': typeof WithdrawRoute
   '/admin/applications': typeof AdminApplicationsRoute
+  '/admin/coins': typeof AdminCoinsRoute
+  '/admin/gifts': typeof AdminGiftsRoute
   '/admin/hosts': typeof AdminHostsRoute
+  '/admin/packages': typeof AdminPackagesRoute
   '/admin/rooms': typeof AdminRoomsRoute
   '/admin/users': typeof AdminUsersRoute
   '/messages/$conversationId': typeof MessagesConversationIdRoute
@@ -252,7 +279,10 @@ export interface FileRouteTypes {
     | '/wallet'
     | '/withdraw'
     | '/admin/applications'
+    | '/admin/coins'
+    | '/admin/gifts'
     | '/admin/hosts'
+    | '/admin/packages'
     | '/admin/rooms'
     | '/admin/users'
     | '/messages/$conversationId'
@@ -277,7 +307,10 @@ export interface FileRouteTypes {
     | '/wallet'
     | '/withdraw'
     | '/admin/applications'
+    | '/admin/coins'
+    | '/admin/gifts'
     | '/admin/hosts'
+    | '/admin/packages'
     | '/admin/rooms'
     | '/admin/users'
     | '/messages/$conversationId'
@@ -303,7 +336,10 @@ export interface FileRouteTypes {
     | '/wallet'
     | '/withdraw'
     | '/admin/applications'
+    | '/admin/coins'
+    | '/admin/gifts'
     | '/admin/hosts'
+    | '/admin/packages'
     | '/admin/rooms'
     | '/admin/users'
     | '/messages/$conversationId'
@@ -454,11 +490,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminApplicationsRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/coins': {
+      id: '/admin/coins'
+      path: '/coins'
+      fullPath: '/admin/coins'
+      preLoaderRoute: typeof AdminCoinsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/gifts': {
+      id: '/admin/gifts'
+      path: '/gifts'
+      fullPath: '/admin/gifts'
+      preLoaderRoute: typeof AdminGiftsRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/hosts': {
       id: '/admin/hosts'
       path: '/hosts'
       fullPath: '/admin/hosts'
       preLoaderRoute: typeof AdminHostsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/packages': {
+      id: '/admin/packages'
+      path: '/packages'
+      fullPath: '/admin/packages'
+      preLoaderRoute: typeof AdminPackagesRouteImport
       parentRoute: typeof AdminRoute
     }
     '/admin/rooms': {
@@ -508,7 +565,10 @@ declare module '@tanstack/react-router' {
 
 interface AdminRouteChildren {
   AdminApplicationsRoute: typeof AdminApplicationsRoute
+  AdminCoinsRoute: typeof AdminCoinsRoute
+  AdminGiftsRoute: typeof AdminGiftsRoute
   AdminHostsRoute: typeof AdminHostsRoute
+  AdminPackagesRoute: typeof AdminPackagesRoute
   AdminRoomsRoute: typeof AdminRoomsRoute
   AdminUsersRoute: typeof AdminUsersRoute
   AdminIndexRoute: typeof AdminIndexRoute
@@ -516,7 +576,10 @@ interface AdminRouteChildren {
 
 const AdminRouteChildren: AdminRouteChildren = {
   AdminApplicationsRoute: AdminApplicationsRoute,
+  AdminCoinsRoute: AdminCoinsRoute,
+  AdminGiftsRoute: AdminGiftsRoute,
   AdminHostsRoute: AdminHostsRoute,
+  AdminPackagesRoute: AdminPackagesRoute,
   AdminRoomsRoute: AdminRoomsRoute,
   AdminUsersRoute: AdminUsersRoute,
   AdminIndexRoute: AdminIndexRoute,
