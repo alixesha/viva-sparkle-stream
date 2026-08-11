@@ -50,7 +50,7 @@ function AdminPackages() {
   });
 
   const save = async () => {
-    if (!form) return;
+    if (!form) { return; }
     const payload = {
       name: form.name,
       coins: Number(form.coins),
