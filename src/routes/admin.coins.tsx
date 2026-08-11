@@ -60,7 +60,7 @@ function AdminCoins() {
   });
 
   const review = async (id: string, approve: boolean) => {
-    const { error } = await supabase.rpc("review_coin_request", { _request_id: id, _approve: approve, _note: note || undefined });
+    const { error } = await supabase.rpc("review_coin_request", { _request_id: id, _approve: approve, ...(note ? { _note: note } : {}) });
     if (error) { toast.error(error.message); return; }
     toast.success(approve ? "Request approved" : "Request rejected");
     setNote("");
