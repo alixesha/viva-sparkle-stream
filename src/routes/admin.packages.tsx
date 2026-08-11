@@ -22,7 +22,7 @@ export const Route = createFileRoute("/admin/packages")({
       { property: "og:description", content: "Create and edit TEST coin packages." },
     ],
   }),
-  component: AdminPackages;
+  component: AdminPackages,
 });
 
 interface PkgForm {
