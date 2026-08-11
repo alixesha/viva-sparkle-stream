@@ -19,6 +19,7 @@ import { Route as HostRouteImport } from './routes/host'
 import { Route as HostApplyRouteImport } from './routes/host-apply'
 import { Route as MessagesRouteImport } from './routes/messages'
 import { Route as NotificationsRouteImport } from './routes/notifications'
+import { Route as PkRouteImport } from './routes/pk'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as RankingsRouteImport } from './routes/rankings'
 import { Route as WalletRouteImport } from './routes/wallet'
@@ -79,6 +80,11 @@ const NotificationsRoute = NotificationsRouteImport.update({
   path: '/notifications',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PkRoute = PkRouteImport.update({
+  id: '/pk',
+  path: '/pk',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ProfileRoute = ProfileRouteImport.update({
   id: '/profile',
   path: '/profile',
@@ -136,6 +142,7 @@ export interface FileRoutesByFullPath {
   '/host-apply': typeof HostApplyRoute
   '/messages': typeof MessagesRouteWithChildren
   '/notifications': typeof NotificationsRoute
+  '/pk': typeof PkRoute
   '/profile': typeof ProfileRoute
   '/rankings': typeof RankingsRoute
   '/wallet': typeof WalletRouteWithChildren
@@ -156,6 +163,7 @@ export interface FileRoutesByTo {
   '/host-apply': typeof HostApplyRoute
   '/messages': typeof MessagesRouteWithChildren
   '/notifications': typeof NotificationsRoute
+  '/pk': typeof PkRoute
   '/profile': typeof ProfileRoute
   '/rankings': typeof RankingsRoute
   '/wallet': typeof WalletRouteWithChildren
@@ -178,6 +186,7 @@ export interface FileRoutesById {
   '/host-apply': typeof HostApplyRoute
   '/messages': typeof MessagesRouteWithChildren
   '/notifications': typeof NotificationsRoute
+  '/pk': typeof PkRoute
   '/profile': typeof ProfileRoute
   '/rankings': typeof RankingsRoute
   '/wallet': typeof WalletRouteWithChildren
@@ -201,6 +210,7 @@ export interface FileRouteTypes {
     | '/host-apply'
     | '/messages'
     | '/notifications'
+    | '/pk'
     | '/profile'
     | '/rankings'
     | '/wallet'
@@ -221,6 +231,7 @@ export interface FileRouteTypes {
     | '/host-apply'
     | '/messages'
     | '/notifications'
+    | '/pk'
     | '/profile'
     | '/rankings'
     | '/wallet'
@@ -242,6 +253,7 @@ export interface FileRouteTypes {
     | '/host-apply'
     | '/messages'
     | '/notifications'
+    | '/pk'
     | '/profile'
     | '/rankings'
     | '/wallet'
@@ -264,6 +276,7 @@ export interface RootRouteChildren {
   HostApplyRoute: typeof HostApplyRoute
   MessagesRoute: typeof MessagesRouteWithChildren
   NotificationsRoute: typeof NotificationsRoute
+  PkRoute: typeof PkRoute
   ProfileRoute: typeof ProfileRoute
   RankingsRoute: typeof RankingsRoute
   WalletRoute: typeof WalletRouteWithChildren
@@ -342,6 +355,13 @@ declare module '@tanstack/react-router' {
       path: '/notifications'
       fullPath: '/notifications'
       preLoaderRoute: typeof NotificationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pk': {
+      id: '/pk'
+      path: '/pk'
+      fullPath: '/pk'
+      preLoaderRoute: typeof PkRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/profile': {
@@ -454,6 +474,7 @@ const rootRouteChildren: RootRouteChildren = {
   HostApplyRoute: HostApplyRoute,
   MessagesRoute: MessagesRouteWithChildren,
   NotificationsRoute: NotificationsRoute,
+  PkRoute: PkRoute,
   ProfileRoute: ProfileRoute,
   RankingsRoute: RankingsRoute,
   WalletRoute: WalletRouteWithChildren,
@@ -464,13 +485,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
