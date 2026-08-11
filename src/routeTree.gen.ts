@@ -19,11 +19,19 @@ import { Route as HostRouteImport } from './routes/host'
 import { Route as HostApplyRouteImport } from './routes/host-apply'
 import { Route as MessagesRouteImport } from './routes/messages'
 import { Route as NotificationsRouteImport } from './routes/notifications'
+import { Route as PkRouteImport } from './routes/pk'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as RankingsRouteImport } from './routes/rankings'
 import { Route as WalletRouteImport } from './routes/wallet'
 import { Route as WithdrawRouteImport } from './routes/withdraw'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
+import { Route as AdminApplicationsRouteImport } from './routes/admin.applications'
+import { Route as AdminCoinsRouteImport } from './routes/admin.coins'
+import { Route as AdminGiftsRouteImport } from './routes/admin.gifts'
+import { Route as AdminHostsRouteImport } from './routes/admin.hosts'
+import { Route as AdminPackagesRouteImport } from './routes/admin.packages'
+import { Route as AdminRoomsRouteImport } from './routes/admin.rooms'
+import { Route as AdminUsersRouteImport } from './routes/admin.users'
 import { Route as MessagesConversationIdRouteImport } from './routes/messages.$conversationId'
 import { Route as RoomRoomIdRouteImport } from './routes/room.$roomId'
 import { Route as UUsernameRouteImport } from './routes/u.$username'
@@ -79,6 +87,11 @@ const NotificationsRoute = NotificationsRouteImport.update({
   path: '/notifications',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PkRoute = PkRouteImport.update({
+  id: '/pk',
+  path: '/pk',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ProfileRoute = ProfileRouteImport.update({
   id: '/profile',
   path: '/profile',
@@ -102,6 +115,41 @@ const WithdrawRoute = WithdrawRouteImport.update({
 const AdminIndexRoute = AdminIndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminApplicationsRoute = AdminApplicationsRouteImport.update({
+  id: '/applications',
+  path: '/applications',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminCoinsRoute = AdminCoinsRouteImport.update({
+  id: '/coins',
+  path: '/coins',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminGiftsRoute = AdminGiftsRouteImport.update({
+  id: '/gifts',
+  path: '/gifts',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminHostsRoute = AdminHostsRouteImport.update({
+  id: '/hosts',
+  path: '/hosts',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminPackagesRoute = AdminPackagesRouteImport.update({
+  id: '/packages',
+  path: '/packages',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminRoomsRoute = AdminRoomsRouteImport.update({
+  id: '/rooms',
+  path: '/rooms',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminUsersRoute = AdminUsersRouteImport.update({
+  id: '/users',
+  path: '/users',
   getParentRoute: () => AdminRoute,
 } as any)
 const MessagesConversationIdRoute = MessagesConversationIdRouteImport.update({
@@ -136,10 +184,18 @@ export interface FileRoutesByFullPath {
   '/host-apply': typeof HostApplyRoute
   '/messages': typeof MessagesRouteWithChildren
   '/notifications': typeof NotificationsRoute
+  '/pk': typeof PkRoute
   '/profile': typeof ProfileRoute
   '/rankings': typeof RankingsRoute
   '/wallet': typeof WalletRouteWithChildren
   '/withdraw': typeof WithdrawRoute
+  '/admin/applications': typeof AdminApplicationsRoute
+  '/admin/coins': typeof AdminCoinsRoute
+  '/admin/gifts': typeof AdminGiftsRoute
+  '/admin/hosts': typeof AdminHostsRoute
+  '/admin/packages': typeof AdminPackagesRoute
+  '/admin/rooms': typeof AdminRoomsRoute
+  '/admin/users': typeof AdminUsersRoute
   '/messages/$conversationId': typeof MessagesConversationIdRoute
   '/room/$roomId': typeof RoomRoomIdRoute
   '/u/$username': typeof UUsernameRoute
@@ -156,10 +212,18 @@ export interface FileRoutesByTo {
   '/host-apply': typeof HostApplyRoute
   '/messages': typeof MessagesRouteWithChildren
   '/notifications': typeof NotificationsRoute
+  '/pk': typeof PkRoute
   '/profile': typeof ProfileRoute
   '/rankings': typeof RankingsRoute
   '/wallet': typeof WalletRouteWithChildren
   '/withdraw': typeof WithdrawRoute
+  '/admin/applications': typeof AdminApplicationsRoute
+  '/admin/coins': typeof AdminCoinsRoute
+  '/admin/gifts': typeof AdminGiftsRoute
+  '/admin/hosts': typeof AdminHostsRoute
+  '/admin/packages': typeof AdminPackagesRoute
+  '/admin/rooms': typeof AdminRoomsRoute
+  '/admin/users': typeof AdminUsersRoute
   '/messages/$conversationId': typeof MessagesConversationIdRoute
   '/room/$roomId': typeof RoomRoomIdRoute
   '/u/$username': typeof UUsernameRoute
@@ -178,10 +242,18 @@ export interface FileRoutesById {
   '/host-apply': typeof HostApplyRoute
   '/messages': typeof MessagesRouteWithChildren
   '/notifications': typeof NotificationsRoute
+  '/pk': typeof PkRoute
   '/profile': typeof ProfileRoute
   '/rankings': typeof RankingsRoute
   '/wallet': typeof WalletRouteWithChildren
   '/withdraw': typeof WithdrawRoute
+  '/admin/applications': typeof AdminApplicationsRoute
+  '/admin/coins': typeof AdminCoinsRoute
+  '/admin/gifts': typeof AdminGiftsRoute
+  '/admin/hosts': typeof AdminHostsRoute
+  '/admin/packages': typeof AdminPackagesRoute
+  '/admin/rooms': typeof AdminRoomsRoute
+  '/admin/users': typeof AdminUsersRoute
   '/messages/$conversationId': typeof MessagesConversationIdRoute
   '/room/$roomId': typeof RoomRoomIdRoute
   '/u/$username': typeof UUsernameRoute
@@ -201,10 +273,18 @@ export interface FileRouteTypes {
     | '/host-apply'
     | '/messages'
     | '/notifications'
+    | '/pk'
     | '/profile'
     | '/rankings'
     | '/wallet'
     | '/withdraw'
+    | '/admin/applications'
+    | '/admin/coins'
+    | '/admin/gifts'
+    | '/admin/hosts'
+    | '/admin/packages'
+    | '/admin/rooms'
+    | '/admin/users'
     | '/messages/$conversationId'
     | '/room/$roomId'
     | '/u/$username'
@@ -221,10 +301,18 @@ export interface FileRouteTypes {
     | '/host-apply'
     | '/messages'
     | '/notifications'
+    | '/pk'
     | '/profile'
     | '/rankings'
     | '/wallet'
     | '/withdraw'
+    | '/admin/applications'
+    | '/admin/coins'
+    | '/admin/gifts'
+    | '/admin/hosts'
+    | '/admin/packages'
+    | '/admin/rooms'
+    | '/admin/users'
     | '/messages/$conversationId'
     | '/room/$roomId'
     | '/u/$username'
@@ -242,10 +330,18 @@ export interface FileRouteTypes {
     | '/host-apply'
     | '/messages'
     | '/notifications'
+    | '/pk'
     | '/profile'
     | '/rankings'
     | '/wallet'
     | '/withdraw'
+    | '/admin/applications'
+    | '/admin/coins'
+    | '/admin/gifts'
+    | '/admin/hosts'
+    | '/admin/packages'
+    | '/admin/rooms'
+    | '/admin/users'
     | '/messages/$conversationId'
     | '/room/$roomId'
     | '/u/$username'
@@ -264,6 +360,7 @@ export interface RootRouteChildren {
   HostApplyRoute: typeof HostApplyRoute
   MessagesRoute: typeof MessagesRouteWithChildren
   NotificationsRoute: typeof NotificationsRoute
+  PkRoute: typeof PkRoute
   ProfileRoute: typeof ProfileRoute
   RankingsRoute: typeof RankingsRoute
   WalletRoute: typeof WalletRouteWithChildren
@@ -344,6 +441,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof NotificationsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/pk': {
+      id: '/pk'
+      path: '/pk'
+      fullPath: '/pk'
+      preLoaderRoute: typeof PkRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/profile': {
       id: '/profile'
       path: '/profile'
@@ -379,6 +483,55 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminIndexRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/applications': {
+      id: '/admin/applications'
+      path: '/applications'
+      fullPath: '/admin/applications'
+      preLoaderRoute: typeof AdminApplicationsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/coins': {
+      id: '/admin/coins'
+      path: '/coins'
+      fullPath: '/admin/coins'
+      preLoaderRoute: typeof AdminCoinsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/gifts': {
+      id: '/admin/gifts'
+      path: '/gifts'
+      fullPath: '/admin/gifts'
+      preLoaderRoute: typeof AdminGiftsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/hosts': {
+      id: '/admin/hosts'
+      path: '/hosts'
+      fullPath: '/admin/hosts'
+      preLoaderRoute: typeof AdminHostsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/packages': {
+      id: '/admin/packages'
+      path: '/packages'
+      fullPath: '/admin/packages'
+      preLoaderRoute: typeof AdminPackagesRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/rooms': {
+      id: '/admin/rooms'
+      path: '/rooms'
+      fullPath: '/admin/rooms'
+      preLoaderRoute: typeof AdminRoomsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/users': {
+      id: '/admin/users'
+      path: '/users'
+      fullPath: '/admin/users'
+      preLoaderRoute: typeof AdminUsersRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/messages/$conversationId': {
       id: '/messages/$conversationId'
       path: '/$conversationId'
@@ -411,10 +564,24 @@ declare module '@tanstack/react-router' {
 }
 
 interface AdminRouteChildren {
+  AdminApplicationsRoute: typeof AdminApplicationsRoute
+  AdminCoinsRoute: typeof AdminCoinsRoute
+  AdminGiftsRoute: typeof AdminGiftsRoute
+  AdminHostsRoute: typeof AdminHostsRoute
+  AdminPackagesRoute: typeof AdminPackagesRoute
+  AdminRoomsRoute: typeof AdminRoomsRoute
+  AdminUsersRoute: typeof AdminUsersRoute
   AdminIndexRoute: typeof AdminIndexRoute
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
+  AdminApplicationsRoute: AdminApplicationsRoute,
+  AdminCoinsRoute: AdminCoinsRoute,
+  AdminGiftsRoute: AdminGiftsRoute,
+  AdminHostsRoute: AdminHostsRoute,
+  AdminPackagesRoute: AdminPackagesRoute,
+  AdminRoomsRoute: AdminRoomsRoute,
+  AdminUsersRoute: AdminUsersRoute,
   AdminIndexRoute: AdminIndexRoute,
 }
 
@@ -454,6 +621,7 @@ const rootRouteChildren: RootRouteChildren = {
   HostApplyRoute: HostApplyRoute,
   MessagesRoute: MessagesRouteWithChildren,
   NotificationsRoute: NotificationsRoute,
+  PkRoute: PkRoute,
   ProfileRoute: ProfileRoute,
   RankingsRoute: RankingsRoute,
   WalletRoute: WalletRouteWithChildren,
