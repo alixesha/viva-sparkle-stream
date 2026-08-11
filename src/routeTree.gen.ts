@@ -25,6 +25,7 @@ import { Route as RankingsRouteImport } from './routes/rankings'
 import { Route as WalletRouteImport } from './routes/wallet'
 import { Route as WithdrawRouteImport } from './routes/withdraw'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
+import { Route as AdminUsersRouteImport } from './routes/admin.users'
 import { Route as MessagesConversationIdRouteImport } from './routes/messages.$conversationId'
 import { Route as RoomRoomIdRouteImport } from './routes/room.$roomId'
 import { Route as UUsernameRouteImport } from './routes/u.$username'
@@ -110,6 +111,11 @@ const AdminIndexRoute = AdminIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminUsersRoute = AdminUsersRouteImport.update({
+  id: '/users',
+  path: '/users',
+  getParentRoute: () => AdminRoute,
+} as any)
 const MessagesConversationIdRoute = MessagesConversationIdRouteImport.update({
   id: '/$conversationId',
   path: '/$conversationId',
@@ -147,6 +153,7 @@ export interface FileRoutesByFullPath {
   '/rankings': typeof RankingsRoute
   '/wallet': typeof WalletRouteWithChildren
   '/withdraw': typeof WithdrawRoute
+  '/admin/users': typeof AdminUsersRoute
   '/messages/$conversationId': typeof MessagesConversationIdRoute
   '/room/$roomId': typeof RoomRoomIdRoute
   '/u/$username': typeof UUsernameRoute
@@ -168,6 +175,7 @@ export interface FileRoutesByTo {
   '/rankings': typeof RankingsRoute
   '/wallet': typeof WalletRouteWithChildren
   '/withdraw': typeof WithdrawRoute
+  '/admin/users': typeof AdminUsersRoute
   '/messages/$conversationId': typeof MessagesConversationIdRoute
   '/room/$roomId': typeof RoomRoomIdRoute
   '/u/$username': typeof UUsernameRoute
@@ -191,6 +199,7 @@ export interface FileRoutesById {
   '/rankings': typeof RankingsRoute
   '/wallet': typeof WalletRouteWithChildren
   '/withdraw': typeof WithdrawRoute
+  '/admin/users': typeof AdminUsersRoute
   '/messages/$conversationId': typeof MessagesConversationIdRoute
   '/room/$roomId': typeof RoomRoomIdRoute
   '/u/$username': typeof UUsernameRoute
@@ -215,6 +224,7 @@ export interface FileRouteTypes {
     | '/rankings'
     | '/wallet'
     | '/withdraw'
+    | '/admin/users'
     | '/messages/$conversationId'
     | '/room/$roomId'
     | '/u/$username'
@@ -236,6 +246,7 @@ export interface FileRouteTypes {
     | '/rankings'
     | '/wallet'
     | '/withdraw'
+    | '/admin/users'
     | '/messages/$conversationId'
     | '/room/$roomId'
     | '/u/$username'
@@ -258,6 +269,7 @@ export interface FileRouteTypes {
     | '/rankings'
     | '/wallet'
     | '/withdraw'
+    | '/admin/users'
     | '/messages/$conversationId'
     | '/room/$roomId'
     | '/u/$username'
@@ -399,6 +411,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminIndexRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/users': {
+      id: '/admin/users'
+      path: '/users'
+      fullPath: '/admin/users'
+      preLoaderRoute: typeof AdminUsersRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/messages/$conversationId': {
       id: '/messages/$conversationId'
       path: '/$conversationId'
@@ -431,10 +450,12 @@ declare module '@tanstack/react-router' {
 }
 
 interface AdminRouteChildren {
+  AdminUsersRoute: typeof AdminUsersRoute
   AdminIndexRoute: typeof AdminIndexRoute
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
+  AdminUsersRoute: AdminUsersRoute,
   AdminIndexRoute: AdminIndexRoute,
 }
 
