@@ -62,6 +62,20 @@
   --animate-drive: drive 3s cubic-bezier(0.3, 0, 0.2, 1) forwards;
   --animate-galaxy: galaxy 4s ease-in-out forwards;
   --animate-marquee: marquee 12s linear infinite;
+  --animate-gift-rose: gift-rose 2.8s ease-out forwards;
+  --animate-gift-heart: gift-heart 2.6s ease-out forwards;
+  --animate-gift-kiss: gift-kiss 2.6s ease-out forwards;
+  --animate-gift-star: gift-star 1.5s ease-in-out infinite;
+  --animate-gift-diamond: gift-diamond 4.2s ease-out forwards;
+  --animate-gift-crown: gift-crown 4.2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  --animate-gift-car: gift-car 3.4s cubic-bezier(0.3, 0, 0.2, 1) forwards;
+  --animate-gift-supercar: gift-supercar 4.6s cubic-bezier(0.2, 0, 0.1, 1) forwards;
+  --animate-gift-castle: gift-castle 5.2s ease-out forwards;
+  --animate-gift-legendary: gift-legendary 5.6s ease-in-out forwards;
+  --animate-gift-rays: gift-rays 6s linear infinite;
+  --animate-gift-shine: gift-shine 1.6s linear infinite;
+  --animate-gift-shake: gift-shake 0.28s ease-in-out infinite;
+  --animate-gift-smoke: gift-smoke 1.4s ease-out infinite;
 }
 
 :root {
