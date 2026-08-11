@@ -42,7 +42,7 @@ function AdminRooms() {
 
   const forceEnd = async (id: string) => {
     const { error } = await supabase.from("live_rooms").update({ status: "ended", ended_at: new Date().toISOString() }).eq("id", id);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success("Room ended");
     void query.refetch();
   };

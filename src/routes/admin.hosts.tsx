@@ -52,7 +52,7 @@ function AdminHosts() {
 
   const updateStatus = async (userId: string, status: HostStatus) => {
     const { error } = await supabase.from("hosts").update({ status }).eq("user_id", userId);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success("Host status updated");
     void hostsQuery.refetch();
   };
@@ -61,7 +61,7 @@ function AdminHosts() {
     const value = Number(levelDrafts[userId]);
     if (!Number.isFinite(value) || value < 1) return toast.error("Invalid level");
     const { error } = await supabase.from("hosts").update({ host_level: value }).eq("user_id", userId);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success("Host level updated");
     void hostsQuery.refetch();
   };
@@ -71,7 +71,7 @@ function AdminHosts() {
       .from("hosts")
       .update({ agency_id: agencyId === "none" ? null : agencyId })
       .eq("user_id", userId);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success("Agency assigned");
     void hostsQuery.refetch();
   };

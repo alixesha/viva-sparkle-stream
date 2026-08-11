@@ -93,7 +93,7 @@ function AdminUsers() {
 
   const toggleSuspend = async (id: string, next: boolean) => {
     const { error } = await supabase.from("profiles").update({ is_suspended: next }).eq("id", id);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success(next ? "User suspended" : "User unsuspended");
     refetchAll();
   };
@@ -101,11 +101,11 @@ function AdminUsers() {
   const toggleBan = async (id: string, banned: boolean) => {
     if (banned) {
       const { error } = await supabase.from("bans").delete().eq("user_id", id);
-      if (error) return toast.error(error.message);
+      if (error) { toast.error(error.message); return; }
       toast.success("Ban lifted");
     } else {
       const { error } = await supabase.from("bans").insert({ user_id: id, reason: "Admin action", is_permanent: true });
-      if (error) return toast.error(error.message);
+      if (error) { toast.error(error.message); return; }
       toast.success("User banned");
     }
     refetchAll();
@@ -114,11 +114,11 @@ function AdminUsers() {
   const toggleRole = async (id: string, role: "moderator" | "admin", has: boolean) => {
     if (has) {
       const { error } = await supabase.from("user_roles").delete().eq("user_id", id).eq("role", role);
-      if (error) return toast.error(error.message);
+      if (error) { toast.error(error.message); return; }
       toast.success(`${role} revoked`);
     } else {
       const { error } = await supabase.from("user_roles").insert({ user_id: id, role });
-      if (error) return toast.error(error.message);
+      if (error) { toast.error(error.message); return; }
       toast.success(`${role} granted`);
     }
     refetchAll();
@@ -136,7 +136,7 @@ function AdminUsers() {
       _amount: amount,
       _reason: coinReason || "Admin adjustment",
     });
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success("Coins adjusted (TEST COINS)");
     setCoinTarget(null);
     setCoinAmount("");

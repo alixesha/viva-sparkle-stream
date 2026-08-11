@@ -63,7 +63,7 @@ function AdminPackages() {
     const { error } = form.id
       ? await supabase.from("coin_packages").update(payload).eq("id", form.id)
       : await supabase.from("coin_packages").insert(payload);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success("Package saved");
     setForm(null);
     void query.refetch();
@@ -71,7 +71,7 @@ function AdminPackages() {
 
   const remove = async (id: string) => {
     const { error } = await supabase.from("coin_packages").delete().eq("id", id);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success("Package removed");
     void query.refetch();
   };

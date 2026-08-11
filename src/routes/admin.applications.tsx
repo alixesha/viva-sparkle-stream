@@ -44,8 +44,8 @@ function AdminApplications() {
   });
 
   const review = async (id: string, approve: boolean) => {
-    const { error } = await supabase.rpc("review_host_application", { _app_id: id, _approve: approve, _note: note || null });
-    if (error) return toast.error(error.message);
+    const { error } = await supabase.rpc("review_host_application", { _app_id: id, _approve: approve, _note: note || undefined });
+    if (error) { toast.error(error.message); return; }
     toast.success(approve ? "Application approved" : "Application rejected");
     setNote("");
     void query.refetch();
