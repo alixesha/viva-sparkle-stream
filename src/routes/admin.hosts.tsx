@@ -59,7 +59,7 @@ function AdminHosts() {
 
   const updateLevel = async (userId: string) => {
     const value = Number(levelDrafts[userId]);
-    if (!Number.isFinite(value) || value < 1) return toast.error("Invalid level");
+    if (!Number.isFinite(value) || value < 1) { toast.error("Invalid level"); return; }
     const { error } = await supabase.from("hosts").update({ host_level: value }).eq("user_id", userId);
     if (error) { toast.error(error.message); return; }
     toast.success("Host level updated");
