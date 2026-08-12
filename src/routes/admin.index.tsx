@@ -84,10 +84,10 @@ function AdminDashboard() {
               <Link to="/admin/coins">
                 <StatTile label="Coin requests" value={full(s.pending_coin_requests)} tone="warn" />
               </Link>
-              <Link to="/admin/withdrawals">
+              <Link to="/admin/coins">
                 <StatTile label="Withdrawals" value={full(s.pending_withdrawals)} tone="warn" />
               </Link>
-              <Link to="/admin/reports">
+              <Link to="/admin/rooms">
                 <StatTile label="Open reports" value={full(s.open_reports)} tone="warn" />
               </Link>
             </div>

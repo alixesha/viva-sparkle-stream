@@ -180,7 +180,7 @@ interface Voice {
 
 function tone(
   v: Voice,
-  { type = "sine" as OscillatorType, from, to, at = 0, dur = 0.5, gain = 0.3, curve = "exp" as "exp" | "lin" },
+  { type = "sine" as OscillatorType, from, to, at = 0, dur = 0.5, gain = 0.3, curve = "exp" as "exp" | "lin" }: { type?: OscillatorType; from: number; to: number; at?: number; dur?: number; gain?: number; curve?: "exp" | "lin" },
 ) {
   const { ctx, out } = v;
   const t = ctx.currentTime + at;

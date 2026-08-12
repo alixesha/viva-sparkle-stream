@@ -21,6 +21,10 @@ export interface GiftMeta {
   icon?: string;
   animation_key?: string;
   animation_url?: string | null;
+  sound_key?: string | null;
+  sound_url?: string | null;
+  duration_ms?: number | null;
+  sender_avatar?: string | null;
   tier?: string;
   quantity?: number;
   coins?: number;

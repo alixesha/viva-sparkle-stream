@@ -192,7 +192,8 @@ function LazyVectorAsset({ url }: { url: string }) {
     let destroy: (() => void) | undefined;
     void (async () => {
       try {
-        const mod = (await import(/* @vite-ignore */ "lottie-web")) as {
+        const spec = "lottie-web";
+        const mod = (await import(/* @vite-ignore */ spec)) as {
           default: { loadAnimation: (o: Record<string, unknown>) => { destroy: () => void } };
         };
         if (!ref.current) return;
