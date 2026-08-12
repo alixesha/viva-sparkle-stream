@@ -1,3 +1,4 @@
+import { LionGiftScene } from "./LionGiftScene";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { ParticleCanvas } from "./ParticleCanvas";
 import { GiftComboDisplay } from "./GiftComboDisplay";
@@ -112,6 +113,7 @@ export function GiftOverlay({
 
       {/* hero layer */}
       <div className="absolute inset-0 grid place-items-center">
+        {event.animationKey === "lion" ? <LionGiftScene duration={duration} /> : (
         {asset && isVideo(asset) ? (
           <video
             src={asset}
@@ -138,9 +140,10 @@ export function GiftOverlay({
           >
             {event.icon}
           </span>
+        
+        )}
         )}
       </div>
-
       <GiftComboDisplay quantity={event.quantity} tier={tier} />
 
       {/* sender ribbon */}
