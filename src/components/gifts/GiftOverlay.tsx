@@ -113,7 +113,7 @@ export function GiftOverlay({
 
       {/* hero layer */}
       <div className="absolute inset-0 grid place-items-center">
-        {event.animationKey === "lion" ? <LionGiftScene duration={duration} /> : (
+        {true ? <LionGiftScene duration={duration} /> : (
       asset && isVideo(asset) ? (
           <video
             src={asset}
