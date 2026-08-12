@@ -14,7 +14,7 @@ import { GiftPanel } from "@/components/live/GiftPanel";
 import { ViewerListSheet } from "@/components/live/ViewerListSheet";
 import { HostControls } from "@/components/live/HostControls";
 import { PkOverlay, PkInviteDialog } from "@/components/live/PkOverlay";
-import { GiftAnimationLayer, type GiftEvent } from "@/components/gifts/GiftAnimation";
+import { GiftAnimationLayer, giftSounds, type GiftEvent } from "@/components/gifts/GiftAnimation";
 import { readGiftMeta, type HostProfile, type LiveMessage, type LiveRoom } from "@/components/live/live-types";
 import { streamingService, type StreamSession } from "@/lib/streaming";
 import { reportContent, shareLink } from "@/lib/social";
@@ -107,11 +107,15 @@ function RoomPage() {
           id: row.id,
           giftName: meta.gift_name ?? "Gift",
           icon: meta.icon ?? "🎁",
-          animationKey: meta.animation_key ?? "stars",
+          animationKey: meta.animation_key ?? "star",
           animationUrl: meta.animation_url ?? null,
-          tier: meta.tier ?? "small",
+          soundKey: meta.sound_key ?? meta.animation_key ?? null,
+          soundUrl: meta.sound_url ?? null,
+          durationMs: meta.duration_ms ?? null,
+          tier: meta.tier ?? "basic",
           quantity: meta.quantity ?? 1,
           senderName: row.username,
+          senderAvatar: row.avatar_url,
           receiverName: host?.display_name ?? "Host",
         },
       ]);
@@ -226,7 +230,7 @@ function RoomPage() {
         <VideoStage room={room} isHost={isHost} onSession={setSession} />
         <GiftAnimationLayer
           queue={giftQueue}
-          onConsume={(id) => setGiftQueue((q) => q.filter((g) => g.id !== id))}
+          onConsume={(ids) => setGiftQueue((q) => q.filter((g) => !ids.includes(g.id)))}
         />
 
         <div className="absolute inset-x-0 top-0 z-20">

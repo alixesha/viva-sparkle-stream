@@ -526,43 +526,55 @@ export type Database = {
         Row: {
           animation_key: string
           animation_url: string | null
+          category: string
           coin_price: number
           created_at: string
           diamond_reward: number
+          duration_ms: number
           icon: string
           icon_url: string | null
           id: string
           is_active: boolean
           name: string
           sort_order: number
+          sound_key: string | null
+          sound_url: string | null
           tier: string
         }
         Insert: {
           animation_key?: string
           animation_url?: string | null
+          category?: string
           coin_price: number
           created_at?: string
           diamond_reward: number
+          duration_ms?: number
           icon?: string
           icon_url?: string | null
           id?: string
           is_active?: boolean
           name: string
           sort_order?: number
+          sound_key?: string | null
+          sound_url?: string | null
           tier?: string
         }
         Update: {
           animation_key?: string
           animation_url?: string | null
+          category?: string
           coin_price?: number
           created_at?: string
           diamond_reward?: number
+          duration_ms?: number
           icon?: string
           icon_url?: string | null
           id?: string
           is_active?: boolean
           name?: string
           sort_order?: number
+          sound_key?: string | null
+          sound_url?: string | null
           tier?: string
         }
         Relationships: []

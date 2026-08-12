@@ -19,13 +19,15 @@ import { cn } from "@/lib/utils";
 import {
   ANIMATION_KEYS,
   GiftAnimationLayer,
+  tierFor,
+  giftSounds,
   type GiftEvent,
 } from "@/components/gifts/GiftAnimation";
 import type { Tables } from "@/integrations/supabase/types";
 
 type Gift = Tables<"gifts">;
 
-const TIERS = ["small", "medium", "large", "premium"] as const;
+const TIERS = ["basic", "premium", "legendary"] as const;
 
 export const Route = createFileRoute("/admin/gifts")({
   head: () => ({
@@ -55,8 +57,8 @@ interface Draft {
 const emptyDraft: Draft = {
   name: "",
   icon: "🎁",
-  animation_key: "stars",
-  tier: "small",
+  animation_key: "rose",
+  tier: "basic",
   coin_price: 10,
   diamond_reward: 5,
   is_active: true,
@@ -95,6 +97,7 @@ function AdminGifts() {
       icon: g.icon || "🎁",
       animationKey: g.animation_key,
       animationUrl: url,
+      soundKey: g.animation_key,
       tier: g.tier,
       quantity: qty,
       senderName: "You",
@@ -179,6 +182,16 @@ function AdminGifts() {
           </button>
         }
       >
+        <button
+          type="button"
+          onClick={() => {
+            const m = giftSounds.toggleMuted();
+            toast.success(m ? "Gift sounds muted" : "Gift sounds on");
+          }}
+          className="mb-2 rounded-full glass px-3 py-1.5 text-xs font-bold tap"
+        >
+          Toggle gift sound
+        </button>
         <p className="mb-2 text-xs text-muted-foreground">
           Tap any animation to preview it full screen exactly as viewers see it in a live room.
         </p>
@@ -192,7 +205,7 @@ function AdminGifts() {
                   name: k,
                   icon: "🎁",
                   animation_key: k,
-                  tier: k === "legendary" || k === "castle" ? "premium" : "large",
+                  tier: tierFor(k),
                   animation_url: null,
                 })
               }
