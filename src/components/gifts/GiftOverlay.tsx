@@ -12,7 +12,7 @@ import { eventDuration, normalizedTier, type GiftEvent } from "@/lib/gifts/gift-
  * Gifts that ship a bespoke, hand-built cinematic scene component.
  * Everything else uses the shared CinematicHero stage.
  */
-const SCENE_COMPONENTS: Record<string, (p: { duration: number; icon?: string }) => JSX.Element> = {
+const SCENE_COMPONENTS: Record<string, React.ComponentType<{ duration?: number; icon?: string }>> = {
   lion: LionGiftScene,
 };
 
