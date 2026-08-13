@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { GiftOverlay } from "@/components/gifts/GiftOverlay";
 import type { GiftEvent } from "@/lib/gifts/gift-events";
 
-export const Route = createFileRoute("/__gifttest")({ component: Page });
+export const Route = createFileRoute("/gifttest")({ component: Page });
 
 const keys = ["lion", "rose", "crown", "universe"];
 
