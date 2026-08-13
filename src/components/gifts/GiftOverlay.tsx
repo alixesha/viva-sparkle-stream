@@ -5,7 +5,7 @@ import { GiftComboDisplay } from "./GiftComboDisplay";
 import { CinematicHero } from "./CinematicHero";
 import { resolveMedia } from "@/lib/media";
 import { giftSounds } from "@/lib/gifts/gift-sound";
-import { sceneFor } from "@/lib/gifts/gift-visuals";
+import { resolveAnimationKey, sceneFor } from "@/lib/gifts/gift-visuals";
 import { eventDuration, normalizedTier, type GiftEvent } from "@/lib/gifts/gift-events";
 
 /**
@@ -107,7 +107,7 @@ export function GiftOverlay({
     return () => timers.forEach((t) => window.clearTimeout(t));
   }, [event.id, scene]);
 
-  const SceneComponent = SCENE_COMPONENTS[event.animationKey];
+  const SceneComponent = SCENE_COMPONENTS[resolveAnimationKey(event.animationKey)];
   const assetNode = asset ? (
     isVideo(asset) ? (
       <video src={asset} autoPlay muted={silent || giftSounds.isMuted} playsInline />
