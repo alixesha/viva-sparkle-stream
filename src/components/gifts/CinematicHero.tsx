@@ -79,13 +79,13 @@ export function CinematicHero({
 
         .cine-hero .ch-pool {
           position: absolute; left: 50%; top: 52%;
-          width: 150vmin; height: 150vmin;
+          width: 95vmin; height: 95vmin;
           transform: translate(-50%,-50%) scale(.6);
-          background: radial-gradient(circle, color-mix(in srgb, var(--ch-a) 55%, transparent) 0%, transparent 52%);
-          opacity: 0; filter: blur(14px);
+          background: radial-gradient(circle, color-mix(in srgb, var(--ch-a) 45%, transparent) 0%, transparent 58%);
+          opacity: 0; filter: blur(10px); mix-blend-mode: screen;
           transition: opacity 700ms ease-out, transform 900ms cubic-bezier(.16,.84,.28,1);
         }
-        .cine-hero.ch-awake .ch-pool { opacity: .85; transform: translate(-50%,-50%) scale(1); }
+        .cine-hero.ch-awake .ch-pool { opacity: .6; transform: translate(-50%,-50%) scale(1); }
 
         .cine-hero .ch-halo {
           position: absolute; left: 50%; top: 52%;
@@ -137,7 +137,7 @@ export function CinematicHero({
           opacity: 0;
           animation: ch-streaks 2.4s linear infinite;
         }
-        .cine-hero.ch-charged .ch-streaks { opacity: .55; }
+        .cine-hero.ch-charged .ch-streaks { opacity: .3; }
         .cine-hero.ch-exit .ch-streaks { opacity: 0; }
 
         .cine-hero .ch-core {
@@ -168,8 +168,8 @@ export function CinematicHero({
           width: calc(var(--ch-size) * 1.5); height: calc(var(--ch-size) * 1.5);
           transform: translate(-50%,-50%);
           border-radius: 50%;
-          background: radial-gradient(circle, color-mix(in srgb, var(--ch-a) 70%, transparent), transparent 62%);
-          filter: blur(18px);
+          background: radial-gradient(circle, color-mix(in srgb, var(--ch-a) 55%, transparent), transparent 64%);
+          filter: blur(16px); mix-blend-mode: screen;
           z-index: -1;
           animation: ch-breathe 1.6s ease-in-out infinite;
         }
