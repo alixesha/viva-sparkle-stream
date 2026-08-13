@@ -2,10 +2,19 @@ import { LionGiftScene } from "./LionGiftScene";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { ParticleCanvas } from "./ParticleCanvas";
 import { GiftComboDisplay } from "./GiftComboDisplay";
+import { CinematicHero } from "./CinematicHero";
+import { resolveMedia } from "@/lib/media";
 import { giftSounds } from "@/lib/gifts/gift-sound";
-import { sceneFor } from "@/lib/gifts/gift-visuals";
+import { resolveAnimationKey, sceneFor } from "@/lib/gifts/gift-visuals";
 import { eventDuration, normalizedTier, type GiftEvent } from "@/lib/gifts/gift-events";
-import { cn } from "@/lib/utils";
+
+/**
+ * Gifts that ship a bespoke, hand-built cinematic scene component.
+ * Everything else uses the shared CinematicHero stage.
+ */
+const SCENE_COMPONENTS: Record<string, React.ComponentType<{ duration?: number; icon?: string }>> = {
+  lion: LionGiftScene,
+};
 
 function isVideo(url: string) {
   return /\.(mp4|webm|mov)(\?|$)/i.test(url);
@@ -37,12 +46,34 @@ export function GiftOverlay({
   const duration = eventDuration(event);
   const rootRef = useRef<HTMLDivElement | null>(null);
   const [flash, setFlash] = useState<{ color: string; dur: number } | null>(null);
+  // Assets live in a private bucket, so every viewer resolves their own signed URL.
+  const [asset, setAsset] = useState<string | null>(
+    event.animationUrl && /^https?:\/\//.test(event.animationUrl) ? event.animationUrl : null,
+  );
+
+  useEffect(() => {
+    let alive = true;
+    void resolveMedia(event.animationUrl).then((url) => {
+      if (alive) setAsset(url);
+    });
+    return () => {
+      alive = false;
+    };
+  }, [event.animationUrl]);
 
   // sound: one voice per gift, always stopped on unmount
   useEffect(() => {
     if (silent) return;
-    const stop = giftSounds.play(event.soundKey ?? event.animationKey, event.soundUrl ?? null);
-    return () => stop();
+    let stop: (() => void) | undefined;
+    let alive = true;
+    void resolveMedia(event.soundUrl).then((url) => {
+      if (!alive) return;
+      stop = giftSounds.play(event.soundKey ?? event.animationKey, url);
+    });
+    return () => {
+      alive = false;
+      stop?.();
+    };
   }, [event.id, event.soundKey, event.soundUrl, event.animationKey, silent]);
 
   // lifecycle timer
@@ -76,14 +107,16 @@ export function GiftOverlay({
     return () => timers.forEach((t) => window.clearTimeout(t));
   }, [event.id, scene]);
 
-  const asset = event.animationUrl;
-  const heroStyle = {
-    fontSize: `${scene.heroSize}vmin`,
-    animationName: scene.hero,
-    animationDuration: `${duration}ms`,
-    animationTimingFunction: "cubic-bezier(.16,.84,.28,1)",
-    animationFillMode: "both",
-  } as React.CSSProperties;
+  const SceneComponent = SCENE_COMPONENTS[resolveAnimationKey(event.animationKey)];
+  const assetNode = asset ? (
+    isVideo(asset) ? (
+      <video src={asset} autoPlay muted={silent || giftSounds.isMuted} playsInline />
+    ) : isLottie(asset) || isRive(asset) ? (
+      <LazyVectorAsset url={asset} />
+    ) : (
+      <img src={asset} alt={event.giftName} />
+    )
+  ) : undefined;
 
   return (
     <div ref={rootRef} className="pointer-events-none absolute inset-0 z-40 overflow-hidden">
@@ -112,36 +145,17 @@ export function GiftOverlay({
       <ParticleCanvas emitters={scene.emitters} duration={duration} />
 
       {/* hero layer */}
-      <div className="absolute inset-0 grid place-items-center">
-        {true ? <LionGiftScene duration={duration} /> : (
-      asset && isVideo(asset) ? (
-          <video
-            src={asset}
-            autoPlay
-            muted={silent || giftSounds.isMuted}
-            playsInline
-            className="max-h-[85vh] w-auto max-w-[95vw]"
-          />
-        ) : asset && (isLottie(asset) || isRive(asset)) ? (
-          <LazyVectorAsset url={asset} />
-        ) : asset ? (
-          <img src={asset} alt={event.giftName} className="max-h-[85vh] w-auto max-w-[95vw]" />
+      <div className="absolute inset-0">
+        {SceneComponent && !assetNode ? (
+          <SceneComponent duration={duration} icon={event.icon} />
         ) : (
-          <span
-            className={cn(
-              "select-none leading-none",
-              tier === "legendary"
-                ? "drop-shadow-[0_0_80px_rgba(255,200,90,.85)]"
-                : tier === "premium"
-                  ? "drop-shadow-[0_0_50px_rgba(160,200,255,.8)]"
-                  : "drop-shadow-[0_0_28px_rgba(255,255,255,.6)]",
-            )}
-            style={heroStyle}
-          >
-            {event.icon}
-          </span>
-        
-        )}
+          <CinematicHero
+            scene={scene}
+            tier={tier}
+            icon={event.icon}
+            duration={duration}
+            asset={assetNode}
+          />
         )}
       </div>
       <GiftComboDisplay quantity={event.quantity} tier={tier} />

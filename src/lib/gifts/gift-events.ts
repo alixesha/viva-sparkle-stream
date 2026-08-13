@@ -21,8 +21,11 @@ export interface GiftEvent {
 }
 
 export function normalizedTier(event: GiftEvent): GiftTier {
-  const t = String(event.tier);
+  const t = String(event.tier ?? "").toLowerCase();
   if (t === "basic" || t === "premium" || t === "legendary") return t;
+  if (t === "small") return "basic";
+  if (t === "medium" || t === "big") return "premium";
+  if (t === "epic" || t === "mythic") return "legendary";
   return sceneFor(event.animationKey).tier;
 }
 
