@@ -383,8 +383,28 @@ export const DEFAULT_SCENE: Scene = {
   emitters: [{ kind: "spark", at: 0, count: 30, colors: ["#fff", "#ffd76a"], origin: "center", size: 4, speed: 320, life: 1400 }],
 };
 
+/** Legacy catalog keys that predate the cinematic scene set. */
+export const SCENE_ALIASES: Record<string, string> = {
+  hearts: "heart",
+  stars: "star",
+  flame: "fire",
+  roses: "rose",
+  car: "supercar",
+  legendary: "universe",
+  sportscar: "supercar",
+  lightning: "thunder",
+  magic_castle: "castle",
+  thunder_god: "thunder",
+  legendary_universe: "universe",
+};
+
+export function resolveAnimationKey(animationKey: string): string {
+  const key = String(animationKey ?? "").toLowerCase();
+  return SCENES[key] ? key : (SCENE_ALIASES[key] ?? key);
+}
+
 export function sceneFor(animationKey: string): Scene {
-  return SCENES[animationKey] ?? DEFAULT_SCENE;
+  return SCENES[resolveAnimationKey(animationKey)] ?? DEFAULT_SCENE;
 }
 
 export function tierFor(animationKey: string): GiftTier {
