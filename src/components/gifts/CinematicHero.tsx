@@ -180,7 +180,7 @@ export function CinematicHero({
           position: absolute; left: 50%; top: 52%;
           width: 22vmin; height: 22vmin;
           border-radius: 50%;
-          border: .5vmin solid color-mix(in srgb, var(--ch-a) 85%, transparent);
+          border: .35vmin solid color-mix(in srgb, var(--ch-a) 85%, transparent);
           box-shadow: 0 0 30px color-mix(in srgb, var(--ch-b) 75%, transparent),
                       inset 0 0 24px color-mix(in srgb, var(--ch-c) 55%, transparent);
           transform: translate(-50%,-50%) scale(.1);
@@ -202,7 +202,7 @@ export function CinematicHero({
         @keyframes ch-wave {
           0% { opacity: 0; transform: translate(-50%,-50%) scale(.12); }
           14% { opacity: .95; }
-          100% { opacity: 0; transform: translate(-50%,-50%) scale(6.5); }
+          100% { opacity: 0; transform: translate(-50%,-50%) scale(4.2); }
         }
         @keyframes ch-bloom { 0% { opacity: 0; } 25% { opacity: .8; } 100% { opacity: 0; } }
         @keyframes ch-core-exit {
