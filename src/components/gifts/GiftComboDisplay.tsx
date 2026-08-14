@@ -7,7 +7,7 @@ export function GiftComboDisplay({ quantity, tier }: { quantity: number; tier: s
   useEffect(() => setBump((b) => b + 1), [quantity]);
   if (quantity < 2) return null;
   return (
-    <div className="pointer-events-none absolute right-4 top-[38%] z-40 select-none">
+    <div className="pointer-events-none absolute right-4 top-[13%] z-40 select-none">
       <span
         key={bump}
         className={cn(

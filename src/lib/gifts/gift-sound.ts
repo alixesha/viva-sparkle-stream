@@ -259,6 +259,71 @@ function sparkleTrail(v: Voice, { at = 0, count = 8, gain = 0.16 } = {}) {
 
 type Recipe = (v: Voice) => void;
 
+/**
+ * Realistic lion roar: sub rumble + growling harmonic stack with amplitude
+ * modulation (the "chuff" texture of a real roar) + formant-filtered breath
+ * noise + closing grunts. Designed to peak immediately so it locks to the
+ * frame where the lion's mouth opens.
+ */
+function lionRoar(v: Voice, { at = 0 } = {}) {
+  const { ctx, out } = v;
+  const t0 = ctx.currentTime + at;
+  const dur = 1.75;
+
+  // growl LFO shared by the voiced layers
+  const lfo = ctx.createOscillator();
+  const lfoGain = ctx.createGain();
+  lfo.type = "sine";
+  lfo.frequency.setValueAtTime(34, t0);
+  lfo.frequency.linearRampToValueAtTime(19, t0 + dur);
+  lfoGain.gain.value = 0.38;
+  lfo.connect(lfoGain);
+  lfo.start(t0);
+  lfo.stop(t0 + dur + 0.1);
+  v.track(lfo);
+
+  const voiced = (type: OscillatorType, f0: number, f1: number, gain: number, detune = 0) => {
+    const osc = ctx.createOscillator();
+    const g = ctx.createGain();
+    osc.type = type;
+    osc.detune.value = detune;
+    osc.frequency.setValueAtTime(f0, t0);
+    osc.frequency.exponentialRampToValueAtTime(f0 * 1.12, t0 + 0.12);
+    osc.frequency.exponentialRampToValueAtTime(f1, t0 + dur);
+    g.gain.setValueAtTime(0.0001, t0);
+    g.gain.exponentialRampToValueAtTime(gain, t0 + 0.07);
+    g.gain.setValueAtTime(gain, t0 + dur * 0.62);
+    g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+    lfoGain.connect(g.gain);
+    osc.connect(g).connect(out);
+    osc.start(t0);
+    osc.stop(t0 + dur + 0.05);
+    v.track(osc);
+    v.track(g);
+  };
+
+  voiced("sine", 52, 30, 0.5); // chest sub
+  voiced("sawtooth", 96, 62, 0.3);
+  voiced("sawtooth", 96, 62, 0.2, 18); // slight detune = animal, not synth
+  voiced("square", 148, 92, 0.12);
+
+  // vocal-tract formants over breath noise
+  for (const [freq, q, gain] of [
+    [620, 7, 0.3],
+    [1180, 9, 0.2],
+    [2450, 11, 0.1],
+  ] as const) {
+    noiseHit(v, { at, dur, gain, freq, q, type: "bandpass", sweepTo: freq * 0.55 });
+  }
+  // air rush + throat rasp
+  noiseHit(v, { at, dur: 0.5, gain: 0.24, freq: 2600, sweepTo: 700, type: "bandpass", q: 0.9 });
+  noiseHit(v, { at: at + dur * 0.55, dur: 0.9, gain: 0.16, freq: 900, sweepTo: 260, type: "lowpass", q: 1 });
+
+  // closing grunts
+  tone(v, { type: "sawtooth", from: 74, to: 46, at: at + dur + 0.05, dur: 0.28, gain: 0.2 });
+  tone(v, { type: "sawtooth", from: 68, to: 40, at: at + dur + 0.42, dur: 0.24, gain: 0.14 });
+}
+
 const RECIPES: Record<string, Recipe> = {
   default: (v) => chime(v, [660, 880], { gain: 0.18 }),
   rose: (v) => {
@@ -312,11 +377,17 @@ const RECIPES: Record<string, Recipe> = {
     whoosh(v, { at: 0.5, dur: 1.4, gain: 0.18 });
     sparkleTrail(v, { at: 0.8, count: 12 });
   },
+  /** Fired by LionGiftScene exactly on the mouth-open frame. */
+  lion_roar: (v) => {
+    lionRoar(v);
+    boom(v, { at: 0.06, gain: 0.5 });
+    noiseHit(v, { at: 0.04, dur: 0.7, gain: 0.3, freq: 4200, sweepTo: 500, type: "bandpass", q: 0.8 });
+    sparkleTrail(v, { at: 0.35, count: 10, gain: 0.1 });
+  },
   lion: (v) => {
-    whoosh(v, { dur: 0.7, gain: 0.24 });
-    roar(v, { at: 0.5, dur: 1.9, base: 95, gain: 0.4 });
-    boom(v, { at: 2.1, gain: 0.5 });
-    sparkleTrail(v, { at: 2.3, count: 12 });
+    whoosh(v, { dur: 0.7, gain: 0.22 });
+    lionRoar(v, { at: 0.4 });
+    boom(v, { at: 0.46, gain: 0.45 });
   },
   dragon: (v) => {
     roar(v, { at: 0.2, dur: 2.0, base: 78, gain: 0.4 });
