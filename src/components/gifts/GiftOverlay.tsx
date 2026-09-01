@@ -12,9 +12,15 @@ import { eventDuration, normalizedTier, type GiftEvent } from "@/lib/gifts/gift-
  * Gifts that ship a bespoke, hand-built cinematic scene component.
  * Everything else uses the shared CinematicHero stage.
  */
-const SCENE_COMPONENTS: Record<string, React.ComponentType<{ duration?: number; icon?: string }>> = {
+const SCENE_COMPONENTS: Record<
+  string,
+  React.ComponentType<{ duration?: number; icon?: string; silent?: boolean }>
+> = {
   lion: LionGiftScene,
 };
+
+/** Scenes that own their own audio track — the generic gift SFX is skipped. */
+const SELF_SCORED_SCENES = new Set(["lion"]);
 
 function isVideo(url: string) {
   return /\.(mp4|webm|mov)(\?|$)/i.test(url);
@@ -61,9 +67,12 @@ export function GiftOverlay({
     };
   }, [event.animationUrl]);
 
+  const sceneKey = resolveAnimationKey(event.animationKey);
+  const selfScored = SELF_SCORED_SCENES.has(sceneKey);
+
   // sound: one voice per gift, always stopped on unmount
   useEffect(() => {
-    if (silent) return;
+    if (silent || selfScored) return;
     let stop: (() => void) | undefined;
     let alive = true;
     void resolveMedia(event.soundUrl).then((url) => {
@@ -81,6 +90,16 @@ export function GiftOverlay({
     const t = window.setTimeout(onDone, duration);
     return () => window.clearTimeout(t);
   }, [event.id, duration, onDone]);
+
+  // bespoke scenes hold the frame; the "X sent Y" ribbon lands near the end
+  const ribbonDelay = SCENE_COMPONENTS[sceneKey] ? Math.max(1200, duration - 3200) : 0;
+  const [showRibbon, setShowRibbon] = useState(ribbonDelay === 0);
+  useEffect(() => {
+    if (ribbonDelay === 0) return;
+    setShowRibbon(false);
+    const t = window.setTimeout(() => setShowRibbon(true), ribbonDelay);
+    return () => window.clearTimeout(t);
+  }, [event.id, ribbonDelay]);
 
   // camera FX
   useEffect(() => {
@@ -107,7 +126,7 @@ export function GiftOverlay({
     return () => timers.forEach((t) => window.clearTimeout(t));
   }, [event.id, scene]);
 
-  const SceneComponent = SCENE_COMPONENTS[resolveAnimationKey(event.animationKey)];
+  const SceneComponent = SCENE_COMPONENTS[sceneKey];
   const assetNode = asset ? (
     isVideo(asset) ? (
       <video src={asset} autoPlay muted={silent || giftSounds.isMuted} playsInline />
@@ -142,12 +161,13 @@ export function GiftOverlay({
         />
       ))}
 
-      <ParticleCanvas emitters={scene.emitters} duration={duration} />
+      {/* bespoke scenes fill the frame, so their particles ride on top */}
+      {!SceneComponent && <ParticleCanvas emitters={scene.emitters} duration={duration} />}
 
       {/* hero layer */}
       <div className="absolute inset-0">
-        {SceneComponent && !assetNode ? (
-          <SceneComponent duration={duration} icon={event.icon} />
+        {SceneComponent ? (
+          <SceneComponent duration={duration} icon={event.icon} silent={silent} />
         ) : (
           <CinematicHero
             scene={scene}
@@ -158,9 +178,11 @@ export function GiftOverlay({
           />
         )}
       </div>
+      {SceneComponent && <ParticleCanvas emitters={scene.emitters} duration={duration} />}
       <GiftComboDisplay quantity={event.quantity} tier={tier} />
 
-      {/* sender ribbon */}
+      {/* sender ribbon — bespoke scenes reveal it once the performance lands */}
+      {showRibbon && (
       <div className="absolute inset-x-0 bottom-[16%] flex justify-center px-4">
         <div className="flex animate-slide-up items-center gap-2.5 rounded-full glass-strong px-3 py-2 shadow-2xl">
           {event.senderAvatar ? (
@@ -185,6 +207,7 @@ export function GiftOverlay({
           <span className="text-2xl">{event.icon}</span>
         </div>
       </div>
+      )}
 
       {flash && (
         <div

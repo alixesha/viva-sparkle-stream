@@ -17,6 +17,7 @@ import { Route as DiscoverRouteImport } from './routes/discover'
 import { Route as GoLiveRouteImport } from './routes/go-live'
 import { Route as HostRouteImport } from './routes/host'
 import { Route as HostApplyRouteImport } from './routes/host-apply'
+import { Route as LiontestRouteImport } from './routes/liontest'
 import { Route as MessagesRouteImport } from './routes/messages'
 import { Route as NotificationsRouteImport } from './routes/notifications'
 import { Route as PkRouteImport } from './routes/pk'
@@ -75,6 +76,11 @@ const HostRoute = HostRouteImport.update({
 const HostApplyRoute = HostApplyRouteImport.update({
   id: '/host-apply',
   path: '/host-apply',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LiontestRoute = LiontestRouteImport.update({
+  id: '/liontest',
+  path: '/liontest',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MessagesRoute = MessagesRouteImport.update({
@@ -182,6 +188,7 @@ export interface FileRoutesByFullPath {
   '/go-live': typeof GoLiveRoute
   '/host': typeof HostRoute
   '/host-apply': typeof HostApplyRoute
+  '/liontest': typeof LiontestRoute
   '/messages': typeof MessagesRouteWithChildren
   '/notifications': typeof NotificationsRoute
   '/pk': typeof PkRoute
@@ -210,6 +217,7 @@ export interface FileRoutesByTo {
   '/go-live': typeof GoLiveRoute
   '/host': typeof HostRoute
   '/host-apply': typeof HostApplyRoute
+  '/liontest': typeof LiontestRoute
   '/messages': typeof MessagesRouteWithChildren
   '/notifications': typeof NotificationsRoute
   '/pk': typeof PkRoute
@@ -240,6 +248,7 @@ export interface FileRoutesById {
   '/go-live': typeof GoLiveRoute
   '/host': typeof HostRoute
   '/host-apply': typeof HostApplyRoute
+  '/liontest': typeof LiontestRoute
   '/messages': typeof MessagesRouteWithChildren
   '/notifications': typeof NotificationsRoute
   '/pk': typeof PkRoute
@@ -271,6 +280,7 @@ export interface FileRouteTypes {
     | '/go-live'
     | '/host'
     | '/host-apply'
+    | '/liontest'
     | '/messages'
     | '/notifications'
     | '/pk'
@@ -299,6 +309,7 @@ export interface FileRouteTypes {
     | '/go-live'
     | '/host'
     | '/host-apply'
+    | '/liontest'
     | '/messages'
     | '/notifications'
     | '/pk'
@@ -328,6 +339,7 @@ export interface FileRouteTypes {
     | '/go-live'
     | '/host'
     | '/host-apply'
+    | '/liontest'
     | '/messages'
     | '/notifications'
     | '/pk'
@@ -358,6 +370,7 @@ export interface RootRouteChildren {
   GoLiveRoute: typeof GoLiveRoute
   HostRoute: typeof HostRoute
   HostApplyRoute: typeof HostApplyRoute
+  LiontestRoute: typeof LiontestRoute
   MessagesRoute: typeof MessagesRouteWithChildren
   NotificationsRoute: typeof NotificationsRoute
   PkRoute: typeof PkRoute
@@ -425,6 +438,13 @@ declare module '@tanstack/react-router' {
       path: '/host-apply'
       fullPath: '/host-apply'
       preLoaderRoute: typeof HostApplyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/liontest': {
+      id: '/liontest'
+      path: '/liontest'
+      fullPath: '/liontest'
+      preLoaderRoute: typeof LiontestRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/messages': {
@@ -619,6 +639,7 @@ const rootRouteChildren: RootRouteChildren = {
   GoLiveRoute: GoLiveRoute,
   HostRoute: HostRoute,
   HostApplyRoute: HostApplyRoute,
+  LiontestRoute: LiontestRoute,
   MessagesRoute: MessagesRouteWithChildren,
   NotificationsRoute: NotificationsRoute,
   PkRoute: PkRoute,
