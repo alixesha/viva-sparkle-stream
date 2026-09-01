@@ -197,6 +197,7 @@ export function GiftOverlay({
           <span className="text-2xl">{event.icon}</span>
         </div>
       </div>
+      )}
 
       {flash && (
         <div
