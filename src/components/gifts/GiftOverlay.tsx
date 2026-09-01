@@ -12,9 +12,15 @@ import { eventDuration, normalizedTier, type GiftEvent } from "@/lib/gifts/gift-
  * Gifts that ship a bespoke, hand-built cinematic scene component.
  * Everything else uses the shared CinematicHero stage.
  */
-const SCENE_COMPONENTS: Record<string, React.ComponentType<{ duration?: number; icon?: string }>> = {
+const SCENE_COMPONENTS: Record<
+  string,
+  React.ComponentType<{ duration?: number; icon?: string; silent?: boolean }>
+> = {
   lion: LionGiftScene,
 };
+
+/** Scenes that own their own audio track — the generic gift SFX is skipped. */
+const SELF_SCORED_SCENES = new Set(["lion"]);
 
 function isVideo(url: string) {
   return /\.(mp4|webm|mov)(\?|$)/i.test(url);
