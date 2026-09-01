@@ -67,9 +67,12 @@ export function GiftOverlay({
     };
   }, [event.animationUrl]);
 
+  const sceneKey = resolveAnimationKey(event.animationKey);
+  const selfScored = SELF_SCORED_SCENES.has(sceneKey);
+
   // sound: one voice per gift, always stopped on unmount
   useEffect(() => {
-    if (silent) return;
+    if (silent || selfScored) return;
     let stop: (() => void) | undefined;
     let alive = true;
     void resolveMedia(event.soundUrl).then((url) => {
