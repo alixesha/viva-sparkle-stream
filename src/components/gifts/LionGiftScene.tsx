@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import { giftSounds } from "@/lib/gifts/gift-sound";
-import lionClip from "../../../public/gifts/lion-cinematic.mp4.asset.json";
+import lionClip from "@/assets/lion-cinematic.mp4.asset.json";
 
 type Props = {
   duration?: number;
