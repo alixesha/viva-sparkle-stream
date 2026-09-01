@@ -91,6 +91,16 @@ export function GiftOverlay({
     return () => window.clearTimeout(t);
   }, [event.id, duration, onDone]);
 
+  // bespoke scenes hold the frame; the "X sent Y" ribbon lands near the end
+  const ribbonDelay = SCENE_COMPONENTS[sceneKey] ? Math.max(1200, duration - 3200) : 0;
+  const [showRibbon, setShowRibbon] = useState(ribbonDelay === 0);
+  useEffect(() => {
+    if (ribbonDelay === 0) return;
+    setShowRibbon(false);
+    const t = window.setTimeout(() => setShowRibbon(true), ribbonDelay);
+    return () => window.clearTimeout(t);
+  }, [event.id, ribbonDelay]);
+
   // camera FX
   useEffect(() => {
     const timers: number[] = [];
