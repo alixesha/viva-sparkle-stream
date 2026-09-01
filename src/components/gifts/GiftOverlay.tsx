@@ -168,9 +168,11 @@ export function GiftOverlay({
           />
         )}
       </div>
+      {SceneComponent && <ParticleCanvas emitters={scene.emitters} duration={duration} />}
       <GiftComboDisplay quantity={event.quantity} tier={tier} />
 
-      {/* sender ribbon */}
+      {/* sender ribbon — bespoke scenes reveal it once the performance lands */}
+      {showRibbon && (
       <div className="absolute inset-x-0 bottom-[16%] flex justify-center px-4">
         <div className="flex animate-slide-up items-center gap-2.5 rounded-full glass-strong px-3 py-2 shadow-2xl">
           {event.senderAvatar ? (
