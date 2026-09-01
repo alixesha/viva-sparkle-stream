@@ -116,7 +116,7 @@ export function GiftOverlay({
     return () => timers.forEach((t) => window.clearTimeout(t));
   }, [event.id, scene]);
 
-  const SceneComponent = SCENE_COMPONENTS[resolveAnimationKey(event.animationKey)];
+  const SceneComponent = SCENE_COMPONENTS[sceneKey];
   const assetNode = asset ? (
     isVideo(asset) ? (
       <video src={asset} autoPlay muted={silent || giftSounds.isMuted} playsInline />
@@ -151,12 +151,13 @@ export function GiftOverlay({
         />
       ))}
 
-      <ParticleCanvas emitters={scene.emitters} duration={duration} />
+      {/* bespoke scenes fill the frame, so their particles ride on top */}
+      {!SceneComponent && <ParticleCanvas emitters={scene.emitters} duration={duration} />}
 
       {/* hero layer */}
       <div className="absolute inset-0">
-        {SceneComponent && !assetNode ? (
-          <SceneComponent duration={duration} icon={event.icon} />
+        {SceneComponent ? (
+          <SceneComponent duration={duration} icon={event.icon} silent={silent} />
         ) : (
           <CinematicHero
             scene={scene}
