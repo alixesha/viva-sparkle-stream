@@ -71,7 +71,12 @@ export function GiftOverlay({
   }, [event.animationUrl]);
 
   const sceneKey = resolveAnimationKey(event.animationKey);
-  const selfScored = SELF_SCORED_SCENES.has(sceneKey);
+  const SceneComponent = SCENE_COMPONENTS[sceneKey];
+  // Built-in photoreal clip. An admin-uploaded custom asset takes precedence,
+  // but bespoke scenes (lion) always keep their own stage.
+  const clip = !SceneComponent && !event.animationUrl ? clipFor(sceneKey) : undefined;
+  const selfScored = SELF_SCORED_SCENES.has(sceneKey) || Boolean(clip?.scored);
+  const cinematic = Boolean(SceneComponent || clip);
 
   // sound: one voice per gift, always stopped on unmount
   useEffect(() => {
