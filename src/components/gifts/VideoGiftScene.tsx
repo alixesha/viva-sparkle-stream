@@ -71,10 +71,10 @@ export function VideoGiftScene({ clip, duration, fallback }: Props) {
           transition:opacity 420ms ease-out;
         }
         .vg-scene.vg-impact .vg-key { animation:vg-key 1600ms ease-out forwards; }
-        @keyframes vg-key { 0%{opacity:0} 15%{opacity:.9} 100%{opacity:.18} }
+        @keyframes vg-key { 0%{opacity:0} 15%{opacity:.5} 100%{opacity:.08} }
         .vg-scene .vg-flash {
           position:absolute; inset:0; opacity:0; mix-blend-mode:screen;
-          background:radial-gradient(circle at 50% 50%, rgba(255,255,255,.95), var(--vg-glow) 40%, transparent 72%);
+          background:radial-gradient(circle at 50% 50%, rgba(255,255,255,.9), var(--vg-glow) 35%, transparent 65%);
         }
         .vg-scene.vg-impact .vg-flash { animation:vg-flash 560ms ease-out forwards; }
         @keyframes vg-flash { 0%{opacity:0} 14%{opacity:1} 100%{opacity:0} }

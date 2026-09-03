@@ -195,8 +195,9 @@ export function GiftOverlay({
           />
         )}
       </div>
-      {/* cinematic scenes fill the frame, so their particles ride on top */}
-      {cinematic && <ParticleCanvas emitters={scene.emitters} duration={duration} />}
+      {/* bespoke scenes fill the frame, so their particles ride on top; clip
+          gifts carry their own particles in the footage */}
+      {SceneComponent && <ParticleCanvas emitters={scene.emitters} duration={duration} />}
       <GiftComboDisplay quantity={event.quantity} tier={tier} />
 
       {/* sender ribbon — bespoke scenes reveal it once the performance lands */}
