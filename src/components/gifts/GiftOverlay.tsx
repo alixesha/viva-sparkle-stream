@@ -1,4 +1,5 @@
 import { LionGiftScene } from "./LionGiftScene";
+import { VideoGiftScene } from "./VideoGiftScene";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { ParticleCanvas } from "./ParticleCanvas";
 import { GiftComboDisplay } from "./GiftComboDisplay";
@@ -6,11 +7,13 @@ import { CinematicHero } from "./CinematicHero";
 import { resolveMedia } from "@/lib/media";
 import { giftSounds } from "@/lib/gifts/gift-sound";
 import { resolveAnimationKey, sceneFor } from "@/lib/gifts/gift-visuals";
+import { clipFor } from "@/lib/gifts/gift-clips";
 import { eventDuration, normalizedTier, type GiftEvent } from "@/lib/gifts/gift-events";
 
 /**
  * Gifts that ship a bespoke, hand-built cinematic scene component.
- * Everything else uses the shared CinematicHero stage.
+ * Every other built-in gift plays its photoreal clip through VideoGiftScene;
+ * CinematicHero is only the last-resort fallback (custom uploads / unknown keys).
  */
 const SCENE_COMPONENTS: Record<
   string,
