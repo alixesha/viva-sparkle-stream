@@ -99,8 +99,8 @@ export function GiftOverlay({
     return () => window.clearTimeout(t);
   }, [event.id, duration, onDone]);
 
-  // bespoke scenes hold the frame; the "X sent Y" ribbon lands near the end
-  const ribbonDelay = SCENE_COMPONENTS[sceneKey] ? Math.max(1200, duration - 3200) : 0;
+  // cinematic scenes hold the frame; the "X sent Y" ribbon lands near the end
+  const ribbonDelay = cinematic ? Math.max(1200, Math.min(duration - 2600, (clip?.impact ?? 0) + 900)) : 0;
   const [showRibbon, setShowRibbon] = useState(ribbonDelay === 0);
   useEffect(() => {
     if (ribbonDelay === 0) return;
@@ -109,10 +109,12 @@ export function GiftOverlay({
     return () => window.clearTimeout(t);
   }, [event.id, ribbonDelay]);
 
-  // camera FX
+  // camera FX — clip-backed gifts lock flash + shake to the clip's impact frame
   useEffect(() => {
     const timers: number[] = [];
-    for (const f of scene.flashes ?? []) {
+    const flashes = clip ? [{ at: clip.impact, color: clip.glow, dur: 380 }] : (scene.flashes ?? []);
+    const shakes = clip ? [{ at: clip.impact, strength: tier === "legendary" ? 12 : 7, dur: 650 }] : (scene.shake ?? []);
+    for (const f of flashes) {
       timers.push(
         window.setTimeout(() => {
           setFlash({ color: f.color, dur: f.dur ?? 320 });
@@ -120,7 +122,7 @@ export function GiftOverlay({
         }, f.at),
       );
     }
-    for (const s of scene.shake ?? []) {
+    for (const s of shakes) {
       timers.push(
         window.setTimeout(() => {
           const el = rootRef.current;
@@ -132,9 +134,9 @@ export function GiftOverlay({
       );
     }
     return () => timers.forEach((t) => window.clearTimeout(t));
-  }, [event.id, scene]);
+  }, [event.id, scene, clip, tier]);
 
-  const SceneComponent = SCENE_COMPONENTS[sceneKey];
+  const dim = clip ? clip.dim : scene.dim;
   const assetNode = asset ? (
     isVideo(asset) ? (
       <video src={asset} autoPlay muted={silent || giftSounds.isMuted} playsInline />
