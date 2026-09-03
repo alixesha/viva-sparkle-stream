@@ -14,6 +14,7 @@ import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AgencyRouteImport } from './routes/agency'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as DiscoverRouteImport } from './routes/discover'
+import { Route as GifttestRouteImport } from './routes/gifttest'
 import { Route as GoLiveRouteImport } from './routes/go-live'
 import { Route as HostRouteImport } from './routes/host'
 import { Route as HostApplyRouteImport } from './routes/host-apply'
@@ -60,6 +61,11 @@ const AuthRoute = AuthRouteImport.update({
 const DiscoverRoute = DiscoverRouteImport.update({
   id: '/discover',
   path: '/discover',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GifttestRoute = GifttestRouteImport.update({
+  id: '/gifttest',
+  path: '/gifttest',
   getParentRoute: () => rootRouteImport,
 } as any)
 const GoLiveRoute = GoLiveRouteImport.update({
@@ -179,6 +185,7 @@ export interface FileRoutesByFullPath {
   '/agency': typeof AgencyRoute
   '/auth': typeof AuthRoute
   '/discover': typeof DiscoverRoute
+  '/gifttest': typeof GifttestRoute
   '/go-live': typeof GoLiveRoute
   '/host': typeof HostRoute
   '/host-apply': typeof HostApplyRoute
@@ -207,6 +214,7 @@ export interface FileRoutesByTo {
   '/agency': typeof AgencyRoute
   '/auth': typeof AuthRoute
   '/discover': typeof DiscoverRoute
+  '/gifttest': typeof GifttestRoute
   '/go-live': typeof GoLiveRoute
   '/host': typeof HostRoute
   '/host-apply': typeof HostApplyRoute
@@ -237,6 +245,7 @@ export interface FileRoutesById {
   '/agency': typeof AgencyRoute
   '/auth': typeof AuthRoute
   '/discover': typeof DiscoverRoute
+  '/gifttest': typeof GifttestRoute
   '/go-live': typeof GoLiveRoute
   '/host': typeof HostRoute
   '/host-apply': typeof HostApplyRoute
@@ -268,6 +277,7 @@ export interface FileRouteTypes {
     | '/agency'
     | '/auth'
     | '/discover'
+    | '/gifttest'
     | '/go-live'
     | '/host'
     | '/host-apply'
@@ -296,6 +306,7 @@ export interface FileRouteTypes {
     | '/agency'
     | '/auth'
     | '/discover'
+    | '/gifttest'
     | '/go-live'
     | '/host'
     | '/host-apply'
@@ -325,6 +336,7 @@ export interface FileRouteTypes {
     | '/agency'
     | '/auth'
     | '/discover'
+    | '/gifttest'
     | '/go-live'
     | '/host'
     | '/host-apply'
@@ -355,6 +367,7 @@ export interface RootRouteChildren {
   AgencyRoute: typeof AgencyRoute
   AuthRoute: typeof AuthRoute
   DiscoverRoute: typeof DiscoverRoute
+  GifttestRoute: typeof GifttestRoute
   GoLiveRoute: typeof GoLiveRoute
   HostRoute: typeof HostRoute
   HostApplyRoute: typeof HostApplyRoute
@@ -404,6 +417,13 @@ declare module '@tanstack/react-router' {
       path: '/discover'
       fullPath: '/discover'
       preLoaderRoute: typeof DiscoverRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/gifttest': {
+      id: '/gifttest'
+      path: '/gifttest'
+      fullPath: '/gifttest'
+      preLoaderRoute: typeof GifttestRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/go-live': {
@@ -616,6 +636,7 @@ const rootRouteChildren: RootRouteChildren = {
   AgencyRoute: AgencyRoute,
   AuthRoute: AuthRoute,
   DiscoverRoute: DiscoverRoute,
+  GifttestRoute: GifttestRoute,
   GoLiveRoute: GoLiveRoute,
   HostRoute: HostRoute,
   HostApplyRoute: HostApplyRoute,
