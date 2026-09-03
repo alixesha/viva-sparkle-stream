@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 import { giftSounds } from "@/lib/gifts/gift-sound";
 import { GIFT_CLIPS } from "@/lib/gifts/gift-clips";
 
-const lionClip = GIFT_CLIPS.lion;
+const lionClip = GIFT_CLIPS["lion"]!;
 
 type Props = {
   duration?: number;
