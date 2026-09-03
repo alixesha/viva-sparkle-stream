@@ -152,32 +152,39 @@ export function GiftOverlay({
       {/* live video dim */}
       <div
         className="absolute inset-0 animate-gift-dim bg-black"
-        style={{ ["--gift-dim" as string]: String(scene.dim), animationDuration: `${duration}ms` }}
+        style={{ ["--gift-dim" as string]: String(dim), animationDuration: `${duration}ms` }}
       />
-      <div className="absolute inset-0 animate-fade-in" style={{ background: scene.backdrop }} />
+      {!clip && <div className="absolute inset-0 animate-fade-in" style={{ background: scene.backdrop }} />}
 
-      {/* rotating god-rays for premium/legendary scenes */}
-      {(scene.rays ?? []).map((tone, i) => (
-        <div
-          key={`${tone}-${i}`}
-          className="absolute left-1/2 top-1/2 size-[190vmax] -translate-x-1/2 -translate-y-1/2 animate-gift-rays opacity-40"
-          style={{
-            animationDuration: `${8 + i * 3}s`,
-            animationDirection: i % 2 ? "reverse" : "normal",
-            background: `conic-gradient(from 0deg, transparent 0deg 10deg, ${tone} 10deg 14deg, transparent 14deg 28deg)`,
-            maskImage: "radial-gradient(circle, black 10%, transparent 68%)",
-            WebkitMaskImage: "radial-gradient(circle, black 10%, transparent 68%)",
-          }}
-        />
-      ))}
+      {/* rotating god-rays — only for the legacy hero fallback */}
+      {!clip &&
+        (scene.rays ?? []).map((tone, i) => (
+          <div
+            key={`${tone}-${i}`}
+            className="absolute left-1/2 top-1/2 size-[190vmax] -translate-x-1/2 -translate-y-1/2 animate-gift-rays opacity-40"
+            style={{
+              animationDuration: `${8 + i * 3}s`,
+              animationDirection: i % 2 ? "reverse" : "normal",
+              background: `conic-gradient(from 0deg, transparent 0deg 10deg, ${tone} 10deg 14deg, transparent 14deg 28deg)`,
+              maskImage: "radial-gradient(circle, black 10%, transparent 68%)",
+              WebkitMaskImage: "radial-gradient(circle, black 10%, transparent 68%)",
+            }}
+          />
+        ))}
 
-      {/* bespoke scenes fill the frame, so their particles ride on top */}
-      {!SceneComponent && <ParticleCanvas emitters={scene.emitters} duration={duration} />}
+      {/* legacy hero: particles sit under the icon */}
+      {!cinematic && <ParticleCanvas emitters={scene.emitters} duration={duration} />}
 
       {/* hero layer */}
       <div className="absolute inset-0">
         {SceneComponent ? (
           <SceneComponent duration={duration} icon={event.icon} silent={silent} />
+        ) : clip ? (
+          <VideoGiftScene
+            clip={clip}
+            duration={duration}
+            fallback={<CinematicHero scene={scene} tier={tier} icon={event.icon} duration={duration} />}
+          />
         ) : (
           <CinematicHero
             scene={scene}
@@ -188,7 +195,8 @@ export function GiftOverlay({
           />
         )}
       </div>
-      {SceneComponent && <ParticleCanvas emitters={scene.emitters} duration={duration} />}
+      {/* cinematic scenes fill the frame, so their particles ride on top */}
+      {cinematic && <ParticleCanvas emitters={scene.emitters} duration={duration} />}
       <GiftComboDisplay quantity={event.quantity} tier={tier} />
 
       {/* sender ribbon — bespoke scenes reveal it once the performance lands */}
