@@ -1,4 +1,5 @@
 import { LionGiftScene } from "./LionGiftScene";
+import { VideoGiftScene } from "./VideoGiftScene";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { ParticleCanvas } from "./ParticleCanvas";
 import { GiftComboDisplay } from "./GiftComboDisplay";
@@ -6,11 +7,13 @@ import { CinematicHero } from "./CinematicHero";
 import { resolveMedia } from "@/lib/media";
 import { giftSounds } from "@/lib/gifts/gift-sound";
 import { resolveAnimationKey, sceneFor } from "@/lib/gifts/gift-visuals";
+import { clipFor } from "@/lib/gifts/gift-clips";
 import { eventDuration, normalizedTier, type GiftEvent } from "@/lib/gifts/gift-events";
 
 /**
  * Gifts that ship a bespoke, hand-built cinematic scene component.
- * Everything else uses the shared CinematicHero stage.
+ * Every other built-in gift plays its photoreal clip through VideoGiftScene;
+ * CinematicHero is only the last-resort fallback (custom uploads / unknown keys).
  */
 const SCENE_COMPONENTS: Record<
   string,
@@ -68,7 +71,12 @@ export function GiftOverlay({
   }, [event.animationUrl]);
 
   const sceneKey = resolveAnimationKey(event.animationKey);
-  const selfScored = SELF_SCORED_SCENES.has(sceneKey);
+  const SceneComponent = SCENE_COMPONENTS[sceneKey];
+  // Built-in photoreal clip. An admin-uploaded custom asset takes precedence,
+  // but bespoke scenes (lion) always keep their own stage.
+  const clip = !SceneComponent && !event.animationUrl ? clipFor(sceneKey) : undefined;
+  const selfScored = SELF_SCORED_SCENES.has(sceneKey) || Boolean(clip?.scored);
+  const cinematic = Boolean(SceneComponent || clip);
 
   // sound: one voice per gift, always stopped on unmount
   useEffect(() => {
@@ -91,8 +99,8 @@ export function GiftOverlay({
     return () => window.clearTimeout(t);
   }, [event.id, duration, onDone]);
 
-  // bespoke scenes hold the frame; the "X sent Y" ribbon lands near the end
-  const ribbonDelay = SCENE_COMPONENTS[sceneKey] ? Math.max(1200, duration - 3200) : 0;
+  // cinematic scenes hold the frame; the "X sent Y" ribbon lands near the end
+  const ribbonDelay = cinematic ? Math.max(1200, Math.min(duration - 2600, (clip?.impact ?? 0) + 900)) : 0;
   const [showRibbon, setShowRibbon] = useState(ribbonDelay === 0);
   useEffect(() => {
     if (ribbonDelay === 0) return;
@@ -101,10 +109,12 @@ export function GiftOverlay({
     return () => window.clearTimeout(t);
   }, [event.id, ribbonDelay]);
 
-  // camera FX
+  // camera FX — clip-backed gifts lock flash + shake to the clip's impact frame
   useEffect(() => {
     const timers: number[] = [];
-    for (const f of scene.flashes ?? []) {
+    const flashes = clip ? [{ at: clip.impact, color: clip.glow, dur: 380 }] : (scene.flashes ?? []);
+    const shakes = clip ? [{ at: clip.impact, strength: tier === "legendary" ? 12 : 7, dur: 650 }] : (scene.shake ?? []);
+    for (const f of flashes) {
       timers.push(
         window.setTimeout(() => {
           setFlash({ color: f.color, dur: f.dur ?? 320 });
@@ -112,7 +122,7 @@ export function GiftOverlay({
         }, f.at),
       );
     }
-    for (const s of scene.shake ?? []) {
+    for (const s of shakes) {
       timers.push(
         window.setTimeout(() => {
           const el = rootRef.current;
@@ -124,9 +134,9 @@ export function GiftOverlay({
       );
     }
     return () => timers.forEach((t) => window.clearTimeout(t));
-  }, [event.id, scene]);
+  }, [event.id, scene, clip, tier]);
 
-  const SceneComponent = SCENE_COMPONENTS[sceneKey];
+  const dim = clip ? clip.dim : scene.dim;
   const assetNode = asset ? (
     isVideo(asset) ? (
       <video src={asset} autoPlay muted={silent || giftSounds.isMuted} playsInline />
@@ -142,32 +152,39 @@ export function GiftOverlay({
       {/* live video dim */}
       <div
         className="absolute inset-0 animate-gift-dim bg-black"
-        style={{ ["--gift-dim" as string]: String(scene.dim), animationDuration: `${duration}ms` }}
+        style={{ ["--gift-dim" as string]: String(dim), animationDuration: `${duration}ms` }}
       />
-      <div className="absolute inset-0 animate-fade-in" style={{ background: scene.backdrop }} />
+      {!clip && <div className="absolute inset-0 animate-fade-in" style={{ background: scene.backdrop }} />}
 
-      {/* rotating god-rays for premium/legendary scenes */}
-      {(scene.rays ?? []).map((tone, i) => (
-        <div
-          key={`${tone}-${i}`}
-          className="absolute left-1/2 top-1/2 size-[190vmax] -translate-x-1/2 -translate-y-1/2 animate-gift-rays opacity-40"
-          style={{
-            animationDuration: `${8 + i * 3}s`,
-            animationDirection: i % 2 ? "reverse" : "normal",
-            background: `conic-gradient(from 0deg, transparent 0deg 10deg, ${tone} 10deg 14deg, transparent 14deg 28deg)`,
-            maskImage: "radial-gradient(circle, black 10%, transparent 68%)",
-            WebkitMaskImage: "radial-gradient(circle, black 10%, transparent 68%)",
-          }}
-        />
-      ))}
+      {/* rotating god-rays — only for the legacy hero fallback */}
+      {!clip &&
+        (scene.rays ?? []).map((tone, i) => (
+          <div
+            key={`${tone}-${i}`}
+            className="absolute left-1/2 top-1/2 size-[190vmax] -translate-x-1/2 -translate-y-1/2 animate-gift-rays opacity-40"
+            style={{
+              animationDuration: `${8 + i * 3}s`,
+              animationDirection: i % 2 ? "reverse" : "normal",
+              background: `conic-gradient(from 0deg, transparent 0deg 10deg, ${tone} 10deg 14deg, transparent 14deg 28deg)`,
+              maskImage: "radial-gradient(circle, black 10%, transparent 68%)",
+              WebkitMaskImage: "radial-gradient(circle, black 10%, transparent 68%)",
+            }}
+          />
+        ))}
 
-      {/* bespoke scenes fill the frame, so their particles ride on top */}
-      {!SceneComponent && <ParticleCanvas emitters={scene.emitters} duration={duration} />}
+      {/* legacy hero: particles sit under the icon */}
+      {!cinematic && <ParticleCanvas emitters={scene.emitters} duration={duration} />}
 
       {/* hero layer */}
       <div className="absolute inset-0">
         {SceneComponent ? (
           <SceneComponent duration={duration} icon={event.icon} silent={silent} />
+        ) : clip ? (
+          <VideoGiftScene
+            clip={clip}
+            duration={duration}
+            fallback={<CinematicHero scene={scene} tier={tier} icon={event.icon} duration={duration} />}
+          />
         ) : (
           <CinematicHero
             scene={scene}
@@ -178,6 +195,8 @@ export function GiftOverlay({
           />
         )}
       </div>
+      {/* bespoke scenes fill the frame, so their particles ride on top; clip
+          gifts carry their own particles in the footage */}
       {SceneComponent && <ParticleCanvas emitters={scene.emitters} duration={duration} />}
       <GiftComboDisplay quantity={event.quantity} tier={tier} />
 

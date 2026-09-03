@@ -1,5 +1,6 @@
 import type { Gift } from "@/components/live/live-types";
-import { sceneFor, type GiftTier } from "./gift-visuals";
+import { resolveAnimationKey, sceneFor, type GiftTier } from "./gift-visuals";
+import { clipFor } from "./gift-clips";
 
 /** One playable gift animation. */
 export interface GiftEvent {
@@ -30,6 +31,10 @@ export function normalizedTier(event: GiftEvent): GiftTier {
 }
 
 export function eventDuration(event: GiftEvent): number {
+  // Built-in cinematic clips own their length — a DB duration_ms must never
+  // cut the footage short (uploaded custom assets still honour duration_ms).
+  const clip = event.animationUrl ? undefined : clipFor(resolveAnimationKey(event.animationKey));
+  if (clip) return clip.duration;
   const scene = sceneFor(event.animationKey);
   return event.durationMs && event.durationMs > 500 ? event.durationMs : scene.duration;
 }
