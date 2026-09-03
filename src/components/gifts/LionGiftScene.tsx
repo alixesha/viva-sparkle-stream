@@ -1,6 +1,8 @@
 import { useEffect, useRef } from "react";
 import { giftSounds } from "@/lib/gifts/gift-sound";
-import lionClip from "@/assets/lion-cinematic.mp4.asset.json";
+import { GIFT_CLIPS } from "@/lib/gifts/gift-clips";
+
+const lionClip = GIFT_CLIPS.lion;
 
 type Props = {
   duration?: number;
@@ -176,13 +178,17 @@ export function LionGiftScene({ duration = 11500, silent = false }: Props) {
         <div className="l-stage">
           <video
             ref={video}
-            src={lionClip.url}
             playsInline
             preload="auto"
             autoPlay
             disablePictureInPicture
             controls={false}
-          />
+          >
+            {/* WebM/VP9 first for Chromium builds without H.264; MP4 covers Safari */}
+            <source src={lionClip.webm} type="video/webm" />
+            <source src={lionClip.mp4} type="video/mp4" />
+          </video>
+
         </div>
         <div className="l-key" />
         <div className="l-flash" />
