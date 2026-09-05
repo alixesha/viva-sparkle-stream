@@ -55,7 +55,6 @@ export function CinematicHero({
     return () => timers.forEach(window.clearTimeout);
   }, [enter, impact, exit]);
 
-  const ringCount = tier === "legendary" ? 4 : tier === "premium" ? 3 : 2;
   const orbitCount = tier === "legendary" ? 16 : tier === "premium" ? 12 : 8;
 
   return (
@@ -242,13 +241,6 @@ export function CinematicHero({
         <div className="ch-core-inner">{asset ?? icon}</div>
       </div>
 
-      {Array.from({ length: ringCount }).map((_, i) => (
-        <div
-          key={i}
-          className="ch-wave"
-          style={{ animationDelay: `${i * 150}ms`, borderColor: i % 2 ? glow.b : glow.a }}
-        />
-      ))}
       <div className="ch-bloom" />
     </div>
   );
