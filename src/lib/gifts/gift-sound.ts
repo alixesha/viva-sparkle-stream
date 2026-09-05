@@ -304,7 +304,17 @@ function noiseHit(
 }
 
 /** Slow build-up bed: swells from silence to `gain` right at `until`. */
-function swell(v: Voice, { until, gain = 0.3, freq = 400, sweepTo = 2000, type = "bandpass" as BiquadFilterType, q = 0.8 }) {
+function swell(
+  v: Voice,
+  {
+    until,
+    gain = 0.3,
+    freq = 400,
+    sweepTo = 2000,
+    type = "bandpass" as BiquadFilterType,
+    q = 0.8,
+  }: { until: number; gain?: number; freq?: number; sweepTo?: number; type?: BiquadFilterType; q?: number },
+) {
   const dur = Math.max(0.4, until);
   noiseHit(v, { at: 0, dur: dur + 0.3, gain, freq, sweepTo, type, q, attack: dur * 0.85 });
 }
