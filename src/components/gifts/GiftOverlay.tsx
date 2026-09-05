@@ -85,13 +85,14 @@ export function GiftOverlay({
     let alive = true;
     void resolveMedia(event.soundUrl).then((url) => {
       if (!alive) return;
-      stop = giftSounds.play(event.soundKey ?? event.animationKey, url);
+      // clip-backed gifts: the recipe is scheduled so its hit lands on the clip's impact frame
+      stop = giftSounds.play(event.soundKey ?? event.animationKey, url, clip ? { impactMs: clip.impact } : {});
     });
     return () => {
       alive = false;
       stop?.();
     };
-  }, [event.id, event.soundKey, event.soundUrl, event.animationKey, silent]);
+  }, [event.id, event.soundKey, event.soundUrl, event.animationKey, silent, selfScored, clip]);
 
   // lifecycle timer
   useEffect(() => {
