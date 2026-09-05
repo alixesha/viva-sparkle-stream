@@ -125,20 +125,6 @@ export function LionGiftScene({ duration = 11500, silent = false }: Props) {
         .lion-scene.lion-impact .l-flash { animation:l-flash 620ms ease-out forwards; }
         @keyframes l-flash { 0%{opacity:0} 12%{opacity:1} 100%{opacity:0} }
 
-        .lion-scene .l-ring {
-          position:absolute; left:50%; top:45%; width:34vmin; aspect-ratio:1;
-          margin:-17vmin 0 0 -17vmin; border-radius:9999px;
-          border:.5vmin solid rgba(255,214,122,.9); opacity:0;
-          box-shadow:0 0 6vmin rgba(255,170,50,.6), inset 0 0 4vmin rgba(255,214,122,.5);
-        }
-        .lion-scene.lion-impact .l-ring { animation:l-ring 1100ms cubic-bezier(.15,.7,.2,1) forwards; }
-        .lion-scene.lion-impact .l-ring.d2 { animation-delay:170ms }
-        .lion-scene.lion-impact .l-ring.d3 { animation-delay:340ms }
-        @keyframes l-ring {
-          0%{opacity:.95; transform:scale(.25)}
-          70%{opacity:.45}
-          100%{opacity:0; transform:scale(3.4)}
-        }
 
         /* dust/ember haze kicked up by the roar */
         .lion-scene .l-dust {
@@ -192,9 +178,6 @@ export function LionGiftScene({ duration = 11500, silent = false }: Props) {
         </div>
         <div className="l-key" />
         <div className="l-flash" />
-        <div className="l-ring" />
-        <div className="l-ring d2" />
-        <div className="l-ring d3" />
         <div className="l-dust" />
       </div>
       <div className="l-vignette" />
