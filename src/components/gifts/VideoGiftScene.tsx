@@ -78,16 +78,6 @@ export function VideoGiftScene({ clip, duration, fallback }: Props) {
         }
         .vg-scene.vg-impact .vg-flash { animation:vg-flash 560ms ease-out forwards; }
         @keyframes vg-flash { 0%{opacity:0} 14%{opacity:1} 100%{opacity:0} }
-        .vg-scene .vg-ring {
-          position:absolute; left:50%; top:50%; width:30vmin; aspect-ratio:1;
-          margin:-15vmin 0 0 -15vmin; border-radius:9999px; opacity:0;
-          border:.45vmin solid rgba(255,255,255,.85);
-          box-shadow:0 0 5vmin var(--vg-glow), inset 0 0 3vmin var(--vg-glow);
-        }
-        .vg-scene.vg-impact .vg-ring { animation:vg-ring 1000ms cubic-bezier(.15,.7,.2,1) forwards; }
-        .vg-scene.vg-impact .vg-ring.d2 { animation-delay:160ms }
-        .vg-scene.vg-impact .vg-ring.d3 { animation-delay:320ms }
-        @keyframes vg-ring { 0%{opacity:.9; transform:scale(.3)} 70%{opacity:.4} 100%{opacity:0; transform:scale(3.6)} }
         .vg-scene.vg-impact .vg-cam { animation:vg-shake 700ms cubic-bezier(.36,.07,.19,.97) both; }
         @keyframes vg-shake {
           0%,100%{transform:translate3d(0,0,0)}
@@ -121,9 +111,6 @@ export function VideoGiftScene({ clip, duration, fallback }: Props) {
         </div>
         <div className="vg-key" />
         <div className="vg-flash" />
-        <div className="vg-ring" />
-        <div className="vg-ring d2" />
-        <div className="vg-ring d3" />
       </div>
       <div className="vg-vignette" />
     </div>

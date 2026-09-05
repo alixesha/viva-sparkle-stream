@@ -178,9 +178,6 @@ export function LionGiftScene({ duration = 11500, silent = false }: Props) {
         </div>
         <div className="l-key" />
         <div className="l-flash" />
-        <div className="l-ring" />
-        <div className="l-ring d2" />
-        <div className="l-ring d3" />
         <div className="l-dust" />
       </div>
       <div className="l-vignette" />
